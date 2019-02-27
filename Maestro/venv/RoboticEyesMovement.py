@@ -14,7 +14,7 @@ Ideas
 1. Convert arbitrary servo positions into angles or something understandable
 2. Have predefined script movements stored in Maestro
 3. Convert to C++
-4. Start small by calibrating gaze location without eye focus
+4. Start small by calibrating head-gaze location (without eye control)
 '''
 
 import maestro # maestro library
@@ -98,7 +98,7 @@ def getPos(ch):
 
 # 5000 right 2500 left
 # delay between left and right
-def eyeHor(final):
+def eyeHor(final):                     #eye horizontal
     horEye = 0
     horEyeR = 6
     servo.setTarget(horEye, final)
