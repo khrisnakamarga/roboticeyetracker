@@ -14,16 +14,10 @@ Ideas
 1. Convert arbitrary servo positions into angles or something understandable
 2. Have predefined script movements stored in Maestro
 3. Convert to C++
-4. Start small by calibrating head-gaze location (without eye control)
+4. Start small by calibrating gaze location without eye focus
 '''
 
-import maestro # maestro library
-import time # for sleeping
-
-
-def main():
-    initialize('COM7') # check device manager!
-    setParam(10, 10)
+'''
     # servo.setTarget(1, 5000)
     # servo.setTarget(2, 5000)
     # time.sleep(4)
@@ -33,23 +27,54 @@ def main():
     # # rotateNeck(6000)
     # # nod(4000)
     # # nod(4000)
-    # servo.setTarget(1, 5000)
-    # servo.setTarget(2, 5000)
-    # time.sleep(4)
+    servo.setTarget(1, 5000)
+    servo.setTarget(2, 5000)
+    time.sleep(4)
     # getPos(0)
     # # nod(4500)
-    eyeHor(4000)
-    eyeHor(2000)
-    eyeHor(4000)
-    eyeHor(2000)
-    getPos(6)
-    eyeHor(3000)
-    getPos(6)
+    # eyeHor(4000)
+    # eyeHor(2000)
+    # eyeHor(4000)
+    # eyeHor(2000)
+    # getPos(6)
+    # eyeHor(3000)
+    # getPos(6)
     # for i in range(6):
     #     rotateNeck(4000)
     #     rotateNeck(8000)
+'''
+
+import maestro # maestro library
+import time # for sleeping
+import numpy, scipy.io
+
+
+
+def main():
+    initialize('COM7') # check device manager!
+    accelLim = 100
+    velLim = 50
+    info = [accelLim, velLim]
+    setParam(accelLim, velLim)
+    position = []
+    t = []
+
+    duration = 4 #duration of the movement
+
+    rotateNeck(4000)
+    time.sleep(duration)
+
+    #step input
+    servo.setTarget(11, 8000)
+    start = time.time()
+    while time.time() - start <= duration:
+        position.append(servo.getPosition(11))
+        t.append(time.time() - start)
+
+    time.sleep(duration)
+
+    scipy.io.savemat('step10.mat', mdict={'pos': position, 't':t, 'info':info})
     servosOff()
-    servo.close()
 
 # post: initializes the Pololu Controller
 def initialize(port):
@@ -73,8 +98,8 @@ def nod(final):
 # parameter: final = final neck position
 def rotateNeck(final):
     neck = 11
-    servo.setAccel(11, 0) #faster response
-    servo.setSpeed(11, 8) #faster response
+    # servo.setAccel(11, 0) #faster response
+    # servo.setSpeed(11, 8) #faster response
     servo.setTarget(neck, final)
     while servo.getPosition(neck) != final:
         time.sleep(0.5)
@@ -98,7 +123,7 @@ def getPos(ch):
 
 # 5000 right 2500 left
 # delay between left and right
-def eyeHor(final):                     #eye horizontal
+def eyeHor(final):
     horEye = 0
     horEyeR = 6
     servo.setTarget(horEye, final)
