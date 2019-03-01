@@ -52,8 +52,8 @@ import numpy, scipy.io
 
 def main():
     initialize('COM7') # check device manager!
-    accelLim = 100
-    velLim = 50
+    accelLim = 10
+    velLim = 0
     info = [accelLim, velLim]
     setParam(accelLim, velLim)
     position = []
@@ -68,12 +68,13 @@ def main():
     servo.setTarget(11, 8000)
     start = time.time()
     while time.time() - start <= duration:
+        time.sleep(0.1);
         position.append(servo.getPosition(11))
         t.append(time.time() - start)
 
     time.sleep(duration)
 
-    scipy.io.savemat('step10.mat', mdict={'pos': position, 't':t, 'info':info})
+    scipy.io.savemat('step11.mat', mdict={'pos': position, 't':t, 'info':info})
     servosOff()
 
 # post: initializes the Pololu Controller
@@ -98,8 +99,8 @@ def nod(final):
 # parameter: final = final neck position
 def rotateNeck(final):
     neck = 11
-    # servo.setAccel(11, 0) #faster response
-    # servo.setSpeed(11, 8) #faster response
+    # servo.setAccel(neck, 1) #faster response
+    # servo.setSpeed(neck, 1) #faster response
     servo.setTarget(neck, final)
     while servo.getPosition(neck) != final:
         time.sleep(0.5)

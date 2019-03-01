@@ -3,14 +3,16 @@
 clear all; close all; clc;
 
 cd 'C:\Users\Khrisna Adi Kamarga\PycharmProjects\Maestro\venv';
-load step9 %lead lag looking
+load step11 %lead lag looking
+% lead lag looking: 9
+% nice looking vel: 11
 
 pos = double(pos);
 
 dx = pos(2:end) - pos(1:end-1);
 dt = t(2:end) - t(1:end-1);
 v = dx./dt;
-v = v(~isnan(v))
+v = v(~isnan(v));
 v(v==0) = [];
 
 figure(1)
