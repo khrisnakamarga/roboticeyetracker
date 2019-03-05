@@ -48,7 +48,22 @@ import maestro # maestro library
 import time # for sleeping
 import numpy, scipy.io
 
+# GLOBAL VARIABLES
+# Pololu Channels
+lHorEye = 0 # Left Eye Horizontal Motion
+rPillar = 1 # Right Neck Pillar
+lPillar = 2 # Left Neck Pillar
+lVertEye = 3 # Left Eye Vertical Motion
+rHorEye = 6 # Right Eye Horizontal Motion
+rVertEye = 7 # Right Eye Vertical Motion
+neck = 11 # Horizontal Neck Motion
 
+
+def eyeMove(rx, ry, lx, ly):
+    servo.setTarget(lHorEye, lx)
+    servo.setTarget(lVertEye, ly)
+    servo.setTarget(rHorEye, rx)
+    servo.setTarget(rVertEye, ry)
 
 def main():
     initialize('COM7') # check device manager!
@@ -86,10 +101,8 @@ def initialize(port):
 # post: nods the head to the final location
 # parameter: final = final vertical location
 def nod(final):
-    rightPillarCh = 1
-    leftPillarCh = 2
-    servo.setTarget(rightPillarCh,final)
-    servo.setTarget(leftPillarCh, final)
+    servo.setTarget(rPillar,final)
+    servo.setTarget(lPillar, final)
     time.sleep(3)
 
 # 6,000 : neutral position (looking front)
@@ -98,7 +111,6 @@ def nod(final):
 # post: rotates the neck to the final position specified location
 # parameter: final = final neck position
 def rotateNeck(final):
-    neck = 11
     # servo.setAccel(neck, 1) #faster response
     # servo.setSpeed(neck, 1) #faster response
     servo.setTarget(neck, final)
@@ -125,11 +137,9 @@ def getPos(ch):
 # 5000 right 2500 left
 # delay between left and right
 def eyeHor(final):
-    horEye = 0
-    horEyeR = 6
-    servo.setTarget(horEye, final)
+    servo.setTarget(lHorEye, final)
     time.sleep(0.5)
-    servo.setTarget(horEyeR, final)
+    servo.setTarget(RHorEye, final)
     time.sleep(2)
     # while servo.getPosition(horEye) != final & \
     #       servo.getPosition(horEyeR) != final:
