@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb1d47a5-8d62-441b-af8e-5439ddffdb2e" name="Default Changelist" comment="" />
+    <list default="true" id="bb1d47a5-8d62-441b-af8e-5439ddffdb2e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/RoboticEyesMovement.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/RoboticEyesMovement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step1.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step1.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step10.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step10.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step11.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step11.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step2.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step2.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step3.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step3.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step4.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step4.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step5.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step5.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step6.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step6.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step7.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step7.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step8.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step8.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/step9.mat" beforeDir="false" afterPath="$PROJECT_DIR$/venv/step9.mat" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,8 +28,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/RoboticEyesMovement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="101" column="9" selection-start-line="101" selection-start-column="9" selection-end-line="102" selection-end-column="46" />
+            <state relative-caret-position="561">
+              <caret line="91" column="28" selection-start-line="91" selection-start-column="28" selection-end-line="91" selection-end-column="28" />
               <folding>
                 <element signature="e#1236#1268#0" expanded="true" />
               </folding>
@@ -25,8 +40,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/maestro.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="24" lean-forward="true" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+            <state relative-caret-position="-238">
+              <caret line="24" column="29" lean-forward="true" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="29" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -47,6 +62,9 @@
     <findStrings>
       <find>controller</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -190,7 +208,7 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Desktop/RoboticEyes/ServoControl.py">
+    <entry file="file://$PROJECT_DIR$/../ServoControl.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="13" lean-forward="true" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
@@ -209,8 +227,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/maestro.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="24" lean-forward="true" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+        <state relative-caret-position="-238">
+          <caret line="24" column="29" lean-forward="true" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="29" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
@@ -219,8 +237,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/RoboticEyesMovement.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="101" column="9" selection-start-line="101" selection-start-column="9" selection-end-line="102" selection-end-column="46" />
+        <state relative-caret-position="561">
+          <caret line="91" column="28" selection-start-line="91" selection-start-column="28" selection-end-line="91" selection-end-column="28" />
           <folding>
             <element signature="e#1236#1268#0" expanded="true" />
           </folding>

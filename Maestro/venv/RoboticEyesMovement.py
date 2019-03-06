@@ -67,8 +67,9 @@ def eyeMove(rx, ry, lx, ly):
 
 def main():
     initialize('COM7') # check device manager!
-    accelLim = 10
-    velLim = 0
+    servo.setTarget(11, 2410)
+    accelLim = 0
+    velLim = 20
     info = [accelLim, velLim]
     setParam(accelLim, velLim)
     position = []
@@ -76,11 +77,10 @@ def main():
 
     duration = 4 #duration of the movement
 
-    rotateNeck(4000)
-    time.sleep(duration)
+    time.sleep(4)
 
     #step input
-    servo.setTarget(11, 8000)
+    servo.setTarget(11, 9600)
     start = time.time()
     while time.time() - start <= duration:
         time.sleep(0.1);
@@ -89,13 +89,16 @@ def main():
 
     time.sleep(duration)
 
-    scipy.io.savemat('step11.mat', mdict={'pos': position, 't':t, 'info':info})
+    scipy.io.savemat('step13.mat', mdict={'pos': position, 't':t, 'info':info})
     servosOff()
 
 # post: initializes the Pololu Controller
 def initialize(port):
     global servo
     servo = maestro.Controller('COM7')
+    servo.setTarget(1, 5000)
+    servo.setTarget(2, 5000)
+    # servo.setTarget(11, 2000)
 
 # pre: pass in values between 4000 - 6000
 # post: nods the head to the final location
@@ -105,6 +108,7 @@ def nod(final):
     servo.setTarget(lPillar, final)
     time.sleep(3)
 
+# range : 2,410 - 9600
 # 6,000 : neutral position (looking front)
 # pre: PLEASE HOLD THE ROBOT!!! MIGHT FALL!!!
 #      INITIALLY, THE ACCELERATION IS SUPER HIGH!
