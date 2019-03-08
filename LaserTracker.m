@@ -3,7 +3,7 @@
 
 clear all; close all; clc;
 
-v = VideoReader("C:\Users\Khrisna Adi Kamarga\Desktop\RoboticEyes\test.mp4")
+v = VideoReader("C:\Users\Khrisna Adi Kamarga\Desktop\RoboticEyes\LaserPointVid.mp4")
 video = double(read(v));
 [m, n, rgb, t] = size(video);
 
@@ -54,7 +54,7 @@ Ky = Ky';
 
 UtnAve = zeros(m,n); % kernel for the averaged frequency domain signal
 for i = 1:t
-    bwVideo = double((video(:,:,1,i))).*isolate;
+    bwVideo = double((video(:,:,1,i))); %.*isolate;
     Un = bwVideo; % gets the 2D coordinate representation of the sample
     Utn = fftn(Un); % fourier transform of the data
     UtnAve = UtnAve + Utn; % cummulative sum of the frequency domain signal
@@ -75,7 +75,7 @@ title("Averaged Data in the Frequency Domain");
 % applying the filter and recovering x and y
 close all; clc;
 % 2D gaussian filter
-tau = 100; % bandwith of the filter (good: 0.2)
+tau = 100000; % bandwith of the filter (good: 0.2)
 [kux, kuy] = meshgrid(ky,kx); % unshifted wave numbers
 filter = exp(-tau*((kux - Kc(1)).^2+(kuy - Kc(2)).^2));
 
@@ -87,13 +87,13 @@ title("Averaged Data in the Frequency Domain");
 
 laser = zeros(t, 2); % kernel for the coordinates of the bucket
 for i = 1:t
-    bwVideo = double((video(:,:,1,i))).*isolate; drawnow
+    bwVideo = double((video(:,:,1,i))); drawnow
     Utn = fftn(bwVideo); %Utn = fftshift(Utn);
     UtnFilter = Utn.*filter; % filtered frequency domain signal
     UnFilter = real(ifftn(UtnFilter)); % obtain the spatial filtered data
     
     % draw the resulting spatial filtered data
-    pcolor(flipud(UnFilter))
+    pcolor(flipud(bwVideo))
     shading interp, colormap(gray); 
     grid on
 
