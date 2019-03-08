@@ -13,6 +13,7 @@ for i = 1:t
     bwVideo = video(:,:,1,i);
     pcolor((bwVideo)), shading interp, colormap(gray);
     drawnow
+    display(i)
 end
 
 %%
@@ -78,20 +79,26 @@ tau = 100; % bandwith of the filter (good: 0.2)
 [kux, kuy] = meshgrid(ky,kx); % unshifted wave numbers
 filter = exp(-tau*((kux - Kc(1)).^2+(kuy - Kc(2)).^2));
 
+%% plot the resulting normalized averaged data in the frequency domain
+pcolor(abs(fftshift(filter))/max(abs(filter), [], 'all')), shading interp, colormap(gray);
+xlabel("Kx"); ylabel("Ky");
+title("Averaged Data in the Frequency Domain");
+%%
+
 laser = zeros(t, 2); % kernel for the coordinates of the bucket
 for i = 1:t
-    bwVideo = double(rgb2gray(video(:,:,:,i)));
-    Utn = fftn(Un); %Utn = fftshift(Utn);
+    bwVideo = double((video(:,:,1,i))).*isolate; drawnow
+    Utn = fftn(bwVideo); %Utn = fftshift(Utn);
     UtnFilter = Utn.*filter; % filtered frequency domain signal
     UnFilter = real(ifftn(UtnFilter)); % obtain the spatial filtered data
     
     % draw the resulting spatial filtered data
-    pcolor(flipud(abs(UnFilter)/max(abs(UnFilter), [], 'all')))
+    pcolor(flipud(UnFilter))
     shading interp, colormap(gray); 
     grid on
 
     % find the coordinate of the center of the bucket
-    [ind1 ind2] = ind2sub([m,n], find(abs(UnFilter) == max(abs(UnFilter), [], 'all')));
+    [ind1 ind2] = ind2sub([m,n], round(mean(find(abs(UnFilter) == max(abs(UnFilter), [], 'all')))));
     laser(i,:) = [X(ind1, ind2), Y(ind1, ind2)];
     
     hold on
