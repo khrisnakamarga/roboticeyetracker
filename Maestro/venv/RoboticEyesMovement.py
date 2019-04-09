@@ -1,3 +1,9 @@
+import maestro  # maestro library
+import time  # for sleeping
+import numpy
+import scipy.io
+
+
 '''
 Author: Khrisna Kamarga
 Project: Microsoft Robotic Eyes Servo Control Script
@@ -15,6 +21,7 @@ Ideas
 2. Have predefined script movements stored in Maestro
 3. Convert to C++
 4. Start small by calibrating gaze location without eye focus
+
 '''
 
 '''
@@ -44,9 +51,10 @@ Ideas
     #     rotateNeck(8000)
 '''
 
-import maestro # maestro library
-import time # for sleeping
-import numpy, scipy.io
+# setting a very high value
+# find out the effective pulses
+
+
 
 # GLOBAL VARIABLES
 # Pololu Channels
@@ -66,6 +74,10 @@ def eyeMove(rx, ry, lx, ly):
     servo.setTarget(rVertEye, ry)
 
 def main():
+    initialize()
+
+
+def stepResponse():
     initialize('COM7') # check device manager!
     servo.setTarget(11, 2410)
     accelLim = 0
@@ -93,7 +105,7 @@ def main():
     servosOff()
 
 # post: initializes the Pololu Controller
-def initialize(port):
+def initialize():
     global servo
     servo = maestro.Controller('COM7')
     servo.setTarget(1, 5000)
@@ -149,7 +161,6 @@ def eyeHor(final):
     #       servo.getPosition(horEyeR) != final:
     #     time.sleep(0.5)
 
-# idk bruh I'm tired it's 3 AM frick
 # right eye vert movement does not work
 # def eyeVert(final):
 #     verEye = 3
@@ -159,10 +170,13 @@ def eyeHor(final):
 #           servo.getPosition(verEyeR) != final:
 #           time.sleep(0.5)
 
+
 def servosOff():
     allChannels = 12
     for ch in range(12):
         servo.setTarget(ch, 0)
+
+
 
 if __name__ == "__main__":
     main()
