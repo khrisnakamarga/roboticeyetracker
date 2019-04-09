@@ -3,6 +3,7 @@ import time  # for sleeping
 import numpy
 import scipy.io
 import keyboard
+import os
 
 
 '''
@@ -120,11 +121,12 @@ def joystickControlV2():
                 eyeHorInitCoord -= 1000
                 eyeHor(eyeHorInitCoord)
             elif keyboard.is_pressed('p'):
-                eyeHorInitCoord += 100
+                eyeHorInitCoord += 1
                 eyeHor(eyeHorInitCoord)
-            # print(neckInitCoord)
-            # print(rPillarInitCoord)
-            # print(lPillarInitCoord)
+            os.system('cls')
+            print("Neck Rotation = " + str(neckInitCoord))
+            print("Right Pillar = " + str(rPillarInitCoord))
+            print("Left Pillar = " + str(lPillarInitCoord))
             time.sleep(0.01)
         except KeyboardInterrupt:
             servosOff()  # if user pressed a key other than the given key the loop will break
