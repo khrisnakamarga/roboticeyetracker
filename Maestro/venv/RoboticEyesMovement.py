@@ -4,6 +4,7 @@ import numpy
 import scipy.io
 import keyboard
 import os
+import threading
 
 
 '''
@@ -88,6 +89,7 @@ def joystickControlV2():
     #     neckInitCoord += 500
     #     rotateNeck(neckInitCoord)
     #     time.sleep(1)
+    t1 = threading.Thread(target=textUI)
 
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
@@ -123,13 +125,20 @@ def joystickControlV2():
             elif keyboard.is_pressed('p'):
                 eyeHorInitCoord += 1
                 eyeHor(eyeHorInitCoord)
-            os.system('cls')
-            print("Neck Rotation = " + str(neckInitCoord))
-            print("Right Pillar = " + str(rPillarInitCoord))
-            print("Left Pillar = " + str(lPillarInitCoord))
+            # os.system('cls')
+            # print("Neck Rotation = " + str(neckInitCoord))
+            # print("Right Pillar = " + str(rPillarInitCoord))
+            # print("Left Pillar = " + str(lPillarInitCoord))
+
             time.sleep(0.01)
         except KeyboardInterrupt:
             servosOff()  # if user pressed a key other than the given key the loop will break
+
+def textUI():
+    os.system('cls')
+    print("Neck Rotation = " + str(neckInitCoord))
+    print("Right Pillar = " + str(rPillarInitCoord))
+    print("Left Pillar = " + str(lPillarInitCoord))
 
 def eyeMove(rx, ry, lx, ly):
     servo.setTarget(lHorEye, lx)
