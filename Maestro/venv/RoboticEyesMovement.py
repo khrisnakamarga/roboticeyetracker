@@ -2,6 +2,7 @@ import maestro  # maestro library
 import time  # for sleeping
 import numpy
 import scipy.io
+import keyboard
 
 
 '''
@@ -65,7 +66,68 @@ lVertEye = 3 # Left Eye Vertical Motion
 rHorEye = 6 # Right Eye Horizontal Motion
 rVertEye = 7 # Right Eye Vertical Motion
 neck = 11 # Horizontal Neck Motion
+neckInitCoord = 4500
+rPillarInitCoord = 5000
+lPillarInitCoord = 5250
+eyeHorInitCoord = 3000
 
+def main():
+    joystickControlV2()
+
+def joystickControlV2():
+    initialize()
+    accelLim = 50
+    velLim = 0
+    setParam(accelLim, velLim)
+    global neckInitCoord
+    global rPillarInitCoord
+    global lPillarInitCoord
+    global eyeHorInitCoord
+    # for i in range(10):
+    #     neckInitCoord += 500
+    #     rotateNeck(neckInitCoord)
+    #     time.sleep(1)
+
+    while True:  # making a loop
+        try:  # used try so that if user pressed other than the given key error will not be shown
+            if keyboard.is_pressed('q'):  # if key 'q' is pressed
+                rPillarInitCoord -= 10
+                lPillarInitCoord += 10
+                servo.setTarget(1, rPillarInitCoord)
+                servo.setTarget(2, lPillarInitCoord)
+            elif keyboard.is_pressed('e'):
+                rPillarInitCoord += 10
+                lPillarInitCoord -= 10
+                servo.setTarget(1, rPillarInitCoord)
+                servo.setTarget(2, lPillarInitCoord)
+            elif keyboard.is_pressed('w'):
+                rPillarInitCoord += 10
+                lPillarInitCoord += 10
+                servo.setTarget(1, rPillarInitCoord)
+                servo.setTarget(2, lPillarInitCoord)
+            elif keyboard.is_pressed('s'):
+                rPillarInitCoord -= 10
+                lPillarInitCoord -= 10
+                servo.setTarget(1, rPillarInitCoord)
+                servo.setTarget(2, lPillarInitCoord)
+            elif keyboard.is_pressed('a'):
+                neckInitCoord -= 100
+                rotateNeck(neckInitCoord)
+            elif keyboard.is_pressed('d'):
+                neckInitCoord += 100
+                rotateNeck(neckInitCoord)
+            elif keyboard.is_pressed('o'):
+                eyeHorInitCoord -= 1000
+                eyeHor(eyeHorInitCoord)
+            elif keyboard.is_pressed('p'):
+                eyeHorInitCoord += 100
+                eyeHor(eyeHorInitCoord)
+            # print(neckInitCoord)
+            # print(rPillarInitCoord)
+            # print(lPillarInitCoord)
+            time.sleep(0.01)
+        except KeyboardInterrupt:
+            servosOff()  # if user pressed a key other than the given key the loop will break
 
 def eyeMove(rx, ry, lx, ly):
     servo.setTarget(lHorEye, lx)
@@ -73,9 +135,32 @@ def eyeMove(rx, ry, lx, ly):
     servo.setTarget(rHorEye, rx)
     servo.setTarget(rVertEye, ry)
 
-def main():
-    initialize()
 
+def joystickControlV1():
+    initialize()
+    accelLim = 0
+    velLim = 0
+    setParam(accelLim, velLim)
+    while True:  # making a loop
+        try:  # used try so that if user pressed other than the given key error will not be shown
+            if keyboard.is_pressed('q'):  # if key 'q' is pressed
+                rotateNeck(4500)
+            elif keyboard.is_pressed('w'):
+                rotateNeck(5000)
+            elif keyboard.is_pressed('e'):
+                rotateNeck(5500)
+            elif keyboard.is_pressed('r'):
+                rotateNeck(6000)
+            elif keyboard.is_pressed('i'):
+                rotateNeck(6500)
+            elif keyboard.is_pressed('o'):
+                rotateNeck(7000)
+            elif keyboard.is_pressed('p'):
+                rotateNeck(7500)
+            elif keyboard.is_pressed('['):
+                rotateNeck(8000)
+        except KeyboardInterrupt:
+            servosOff()  # if user pressed a key other than the given key the loop will break
 
 def stepResponse():
     initialize('COM7') # check device manager!
@@ -109,7 +194,7 @@ def initialize():
     global servo
     servo = maestro.Controller('COM7')
     servo.setTarget(1, 5000)
-    servo.setTarget(2, 5000)
+    servo.setTarget(2, 5250)
     # servo.setTarget(11, 2000)
 
 # pre: pass in values between 4000 - 6000
@@ -130,8 +215,8 @@ def rotateNeck(final):
     # servo.setAccel(neck, 1) #faster response
     # servo.setSpeed(neck, 1) #faster response
     servo.setTarget(neck, final)
-    while servo.getPosition(neck) != final:
-        time.sleep(0.5)
+    # while servo.getPosition(neck) != final:
+    #     time.sleep(0.5)
 
 # pre: input valid channel number (check the hardware connection)
 # post: sets the maximum acceleration for all the channels
@@ -155,7 +240,7 @@ def getPos(ch):
 def eyeHor(final):
     servo.setTarget(lHorEye, final)
     time.sleep(0.5)
-    servo.setTarget(RHorEye, final)
+    servo.setTarget(rHorEye, final)
     time.sleep(2)
     # while servo.getPosition(horEye) != final & \
     #       servo.getPosition(horEyeR) != final:
