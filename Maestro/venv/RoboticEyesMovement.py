@@ -4,6 +4,7 @@ import numpy
 import scipy.io
 import keyboard
 import os
+import threading
 
 
 '''
@@ -71,10 +72,16 @@ neckInitCoord = 4500
 rPillarInitCoord = 5000
 lPillarInitCoord = 5250
 eyeHorInitCoord = 3000
+uicount = 1
 
 def main():
     joystickControlV2()
 
+#LIMITS
+#neck 9600 2800
+#rpillar 5810 4030
+#lpillar 5920 4140
+#
 def joystickControlV2():
     initialize()
     accelLim = 50
@@ -88,34 +95,45 @@ def joystickControlV2():
     #     neckInitCoord += 500
     #     rotateNeck(neckInitCoord)
     #     time.sleep(1)
+    t1 = threading.Thread(target=textUI)
 
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
             if keyboard.is_pressed('q'):  # if key 'q' is pressed
-                rPillarInitCoord -= 10
-                lPillarInitCoord += 10
+                if rPillarInitCoord > 4030:
+                    rPillarInitCoord -= 10
+                if lPillarInitCoord < 5920:
+                    lPillarInitCoord += 10
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('e'):
-                rPillarInitCoord += 10
-                lPillarInitCoord -= 10
+                if rPillarInitCoord < 5810:
+                    rPillarInitCoord += 10
+                if lPillarInitCoord > 4140:
+                    lPillarInitCoord -= 10
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('w'):
-                rPillarInitCoord += 10
-                lPillarInitCoord += 10
+                if rPillarInitCoord < 5810:
+                    rPillarInitCoord += 10
+                if lPillarInitCoord < 5920:
+                    lPillarInitCoord += 10
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('s'):
-                rPillarInitCoord -= 10
-                lPillarInitCoord -= 10
+                if rPillarInitCoord > 4030:
+                    rPillarInitCoord -= 10
+                if lPillarInitCoord > 4140:
+                    lPillarInitCoord -= 10
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('a'):
-                neckInitCoord -= 100
+                if neckInitCoord > 2800:
+                    neckInitCoord -= 100
                 rotateNeck(neckInitCoord)
             elif keyboard.is_pressed('d'):
-                neckInitCoord += 100
+                if neckInitCoord < 9600:
+                    neckInitCoord += 100
                 rotateNeck(neckInitCoord)
             elif keyboard.is_pressed('o'):
                 eyeHorInitCoord -= 1000
@@ -123,13 +141,24 @@ def joystickControlV2():
             elif keyboard.is_pressed('p'):
                 eyeHorInitCoord += 1
                 eyeHor(eyeHorInitCoord)
-            os.system('cls')
-            print("Neck Rotation = " + str(neckInitCoord))
-            print("Right Pillar = " + str(rPillarInitCoord))
-            print("Left Pillar = " + str(lPillarInitCoord))
+
+            # os.system('cls')
+            # print("Neck Rotation = " + str(neckInitCoord))
+            # print("Right Pillar = " + str(rPillarInitCoord))
+            # print("Left Pillar = " + str(lPillarInitCoord))
+            uicount += 1
+            if uicount == 5:
+                uicount = 0
+                updateui()
             time.sleep(0.01)
         except KeyboardInterrupt:
             servosOff()  # if user pressed a key other than the given key the loop will break
+
+def updateui():
+    os.system('cls')
+    print("Neck Rotation = " + str(neckInitCoord))
+    print("Right Pillar = " + str(rPillarInitCoord))
+    print("Left Pillar = " + str(lPillarInitCoord))
 
 def eyeMove(rx, ry, lx, ly):
     servo.setTarget(lHorEye, lx)
@@ -137,7 +166,7 @@ def eyeMove(rx, ry, lx, ly):
     servo.setTarget(rHorEye, rx)
     servo.setTarget(rVertEye, ry)
 
-
+# NOT USED ================
 def joystickControlV1():
     initialize()
     accelLim = 0
