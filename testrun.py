@@ -14,8 +14,12 @@ import ServoControl
 
 
 import time
+import threading
+import numpy
 
 
+t1 = threading.Thread(target=print_square, args=(10,))
+t2 = threading.Thread(target=print_cube, args=(10,))
 
 while True:  #calibration mode
 
