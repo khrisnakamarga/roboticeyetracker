@@ -1,21 +1,28 @@
 import keyboard
 
-def joystickControl():
-    UP = 0
-    DOWN = 0
-    LEFT = 0
-    RIGHT = 0
+#variables
+prevCoordinate = [0,0]
+prevServoValue = [0,0]
+
+
+def joystick_control():
 
     if keyboard.is_pressed():
-        UP = 1
+
     if keyboard.is_pressed():
-        DOWN = 1
+
     if keyboard.is_pressed():
-        LEFT = 1
+
     if keyboard.is_pressed():
-        RIGHT = 1
-    output = [UP, DOWN, LEFT, RIGHT]
-    return output
+
+
+    if MODEFLAG:
+        global currentServoValue = global prevServoValue + changes
+        prevServoValue = currentServoValue
+    else
+        global targetCoordinate = global prevCoordinate + changes
+        prevCoordinate = targetCoordinate
+    return
 
 
 

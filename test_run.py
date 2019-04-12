@@ -22,20 +22,21 @@ import servo_control
 import time
 import threading
 import numpy
+import os
+
 
 
 def program_run():
     while True:  # calibration mode
-
-        if MODEFLAG:    #switch to mode
+        if MODEFLAG:    #switch  mode
             break
 
-    while True:  # feedforward control mode
+
+
+
+
 
     return
-
-
-
 
 
 thread1 = threading.Thread(target=user_interface, args=())

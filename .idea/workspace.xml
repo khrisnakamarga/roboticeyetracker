@@ -2,13 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41767244-7f56-4e6f-b38b-591ebbd158cb" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/generate_map.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servo_control.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/displayToScreen.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/getCalibrationCoordinates.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/joystickControl.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/saveServoState.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testrun.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/userInterface.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/joystick_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/joystick_control.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_run.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_interface.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,20 +16,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test_run.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-              <folding>
-                <element signature="e#371#393#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,15 +32,22 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/testRun.py" />
+        <option value="$PROJECT_DIR$/generate_map.py" />
+        <option value="$PROJECT_DIR$/servo_control.py" />
+        <option value="$PROJECT_DIR$/joystick_control.py" />
         <option value="$PROJECT_DIR$/test_run.py" />
+        <option value="$PROJECT_DIR$/user_interface.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="961" />
-    <option name="y" value="-11" />
+    <option name="x" value="385" />
+    <option name="y" value="172" />
     <option name="width" value="1302" />
     <option name="height" value="1404" />
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -98,7 +98,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1721" height="944" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.29970327" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -120,13 +119,7 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/testRun.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/testRun.py" />
     <entry file="file://$PROJECT_DIR$/Maestro/venv/RoboticEyesMovement.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="589">
@@ -140,13 +133,30 @@
     <entry file="file://$PROJECT_DIR$/ServoControl.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/generate_map.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/servo_control.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user_interface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test_run.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-          <folding>
-            <element signature="e#371#393#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="238">
+          <caret line="14" column="17" lean-forward="true" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/joystick_control.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>
