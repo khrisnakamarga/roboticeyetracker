@@ -84,7 +84,7 @@ def main():
 #
 def joystickControlV2():
     initialize()
-    accelLim = 50
+    accelLim = 0
     velLim = 0
     setParam(accelLim, velLim)
     global neckInitCoord
@@ -95,7 +95,7 @@ def joystickControlV2():
     #     neckInitCoord += 500
     #     rotateNeck(neckInitCoord)
     #     time.sleep(1)
-    t1 = threading.Thread(target=textUI)
+    # t1 = threading.Thread(target=textUI)
 
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
@@ -136,29 +136,33 @@ def joystickControlV2():
                     neckInitCoord += 100
                 rotateNeck(neckInitCoord)
             elif keyboard.is_pressed('o'):
-                eyeHorInitCoord -= 1000
+                eyeHorInitCoord -= 10
                 eyeHor(eyeHorInitCoord)
             elif keyboard.is_pressed('p'):
-                eyeHorInitCoord += 1
+                eyeHorInitCoord += 10
                 eyeHor(eyeHorInitCoord)
+            elif keyboard.is_pressed('z'):
+                servosOff()
 
             # os.system('cls')
             # print("Neck Rotation = " + str(neckInitCoord))
             # print("Right Pillar = " + str(rPillarInitCoord))
             # print("Left Pillar = " + str(lPillarInitCoord))
+            global uicount
             uicount += 1
-            if uicount == 5:
+            if uicount == 20:
                 uicount = 0
                 updateui()
-            time.sleep(0.01)
+            time.sleep(0.005)
         except KeyboardInterrupt:
-            servosOff()  # if user pressed a key other than the given key the loop will break
+            servosOff(eyeHorInitCoord)  # if user pressed a key other than the given key the loop will break
 
 def updateui():
     os.system('cls')
     print("Neck Rotation = " + str(neckInitCoord))
     print("Right Pillar = " + str(rPillarInitCoord))
     print("Left Pillar = " + str(lPillarInitCoord))
+    print("Eyes = " + str(eyeHorInitCoord))
 
 def eyeMove(rx, ry, lx, ly):
     servo.setTarget(lHorEye, lx)
@@ -166,7 +170,6 @@ def eyeMove(rx, ry, lx, ly):
     servo.setTarget(rHorEye, rx)
     servo.setTarget(rVertEye, ry)
 
-# NOT USED ================
 def joystickControlV1():
     initialize()
     accelLim = 0
@@ -270,12 +273,11 @@ def getPos(ch):
 # delay between left and right
 def eyeHor(final):
     servo.setTarget(lHorEye, final)
-    time.sleep(0.5)
-    servo.setTarget(rHorEye, final)
-    time.sleep(2)
-    # while servo.getPosition(horEye) != final & \
-    #       servo.getPosition(horEyeR) != final:
-    #     time.sleep(0.5)
+    servo.setTarget(rHorEye, final-500)
+
+
+# def eyeHorBoth(final):
+
 
 # right eye vert movement does not work
 # def eyeVert(final):
