@@ -16,26 +16,30 @@ import save_servo_state
 import user_interface
 import coordinate_gen
 import servo_control
-
+import generate_map
+import feedforward_control
 
 #importing libraries
 import time
 import threading
 import numpy
-import os
-
-
 
 def program_run():
     while True:  # calibration mode
-        if MODEFLAG:    #switch  mode
-            break
+        if MODEFLAG:   #calibration mode
+            coordinate_gen()        #generates current target coordinate
+            display_to_screen()     #shows it on the screen
+            joystick_control()      #set the current target servo positions
+            servo_control()         #move servos to positions
+            save_servo_state()      #save to array if ENTERFLAG is on
+            generate_map()       #generates the interpolated map if the is filled up
 
 
-
-
-
-
+        else:    #feedforward mode
+            joystick_control()      #set current target screen coordinates
+            feedforward_control()   #convert target coordinates to servo positions
+            servo_control()         #move servos to positions
+            display_to_screen()     #display target coordinates on screen for comparison
     return
 
 
