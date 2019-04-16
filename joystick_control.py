@@ -1,9 +1,9 @@
 import keyboard
+import time
 
 #variables
-prevCoordinate = [0,0]
-prevServoValue = [0,0]
-
+prevCoordinate = [0, 0]
+prevServoValue = [0, 0]
 
 def joystick_control():
 
@@ -22,8 +22,10 @@ def joystick_control():
     else
         global targetCoordinate = global prevCoordinate + changes
         prevCoordinate = targetCoordinate
+    time.sleep(500)
     return
 
+def getxy():
 
 
 
