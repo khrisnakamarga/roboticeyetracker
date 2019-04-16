@@ -48,19 +48,21 @@ uicount = 1  # counter that updates the console UI
 
 # vert eye: 2600 - 3120
 
-def main():
-    joystickControlV2()
-
 #LIMITS
 #neck 9600 2800
 #rpillar 5810 4030
 #lpillar 5920 4140
-#
-def joystickControlV2():
+
+
+# second version of the joystick controller
+# uses the qwe, asd to control the neck and head gaze movement
+# uses the op, tg to control the eye movements
+# updates the servo coordinates to the UI in the console
+def keyboard_control_front():
     initialize()
     accelLim = 0
     velLim = 0
-    setParam(accelLim, velLim)
+    set_param(accelLim, velLim)
     global neckInitCoord
     global rPillarInitCoord
     global lPillarInitCoord
@@ -68,7 +70,7 @@ def joystickControlV2():
     global eyeVertInitCoord
     # for i in range(10):
     #     neckInitCoord += 500
-    #     rotateNeck(neckInitCoord)
+    #     rotate_neck(neckInitCoord)
     #     time.sleep(1)
     # t1 = threading.Thread(target=textUI)
 
@@ -105,11 +107,11 @@ def joystickControlV2():
             elif keyboard.is_pressed('a'):
                 if neckInitCoord > 2800:
                     neckInitCoord -= 100
-                rotateNeck(neckInitCoord)
+                rotate_neck(neckInitCoord)
             elif keyboard.is_pressed('d'):
                 if neckInitCoord < 9600:
                     neckInitCoord += 100
-                rotateNeck(neckInitCoord)
+                rotate_neck(neckInitCoord)
             elif keyboard.is_pressed('o'):
                 eyeHorInitCoord -= 10
                 eyeHor(eyeHorInitCoord)
@@ -125,7 +127,7 @@ def joystickControlV2():
                     eyeVertInitCoord += 10
                 eyeVert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
-                servosOff()
+                servos_off()
 
             # os.system('cls')
             # print("Neck Rotation = " + str(neckInitCoord))
@@ -135,13 +137,95 @@ def joystickControlV2():
             uicount += 1
             if uicount == 5:
                 uicount = 0
-                updateui()
+                update_ui()
             time.sleep(0.005)
         except KeyboardInterrupt:
-            servosOff(eyeHorInitCoord)  # if user pressed a key other than the given key the loop will break
+            servos_off()  # if user pressed a key other than the given key the loop will break
+
+
+# mirrored
+def keyboard_control_back():
+    initialize()
+    accelLim = 0
+    velLim = 0
+    set_param(accelLim, velLim)
+    global neckInitCoord
+    global rPillarInitCoord
+    global lPillarInitCoord
+    global eyeHorInitCoord
+    global eyeVertInitCoord
+
+    while True:  # making a loop
+        try:  # used try so that if user pressed other than the given key error will not be shown
+            if keyboard.is_pressed('e'):  # if key 'q' is pressed
+                if rPillarInitCoord > 4030:
+                    rPillarInitCoord -= 10
+                if lPillarInitCoord < 5920:
+                    lPillarInitCoord += 10
+                servo.setTarget(1, rPillarInitCoord)
+                servo.setTarget(2, lPillarInitCoord)
+            elif keyboard.is_pressed('q'):
+                if rPillarInitCoord < 5810:
+                    rPillarInitCoord += 10
+                if lPillarInitCoord > 4140:
+                    lPillarInitCoord -= 10
+                servo.setTarget(1, rPillarInitCoord)
+                servo.setTarget(2, lPillarInitCoord)
+            elif keyboard.is_pressed('w'):
+                if rPillarInitCoord < 5810:
+                    rPillarInitCoord += 10
+                if lPillarInitCoord < 5920:
+                    lPillarInitCoord += 10
+                servo.setTarget(1, rPillarInitCoord)
+                servo.setTarget(2, lPillarInitCoord)
+            elif keyboard.is_pressed('s'):
+                if rPillarInitCoord > 4030:
+                    rPillarInitCoord -= 10
+                if lPillarInitCoord > 4140:
+                    lPillarInitCoord -= 10
+                servo.setTarget(1, rPillarInitCoord)
+                servo.setTarget(2, lPillarInitCoord)
+            elif keyboard.is_pressed('d'):
+                if neckInitCoord > 2800:
+                    neckInitCoord -= 100
+                rotate_neck(neckInitCoord)
+            elif keyboard.is_pressed('a'):
+                if neckInitCoord < 9600:
+                    neckInitCoord += 100
+                rotate_neck(neckInitCoord)
+            elif keyboard.is_pressed('p'):
+                eyeHorInitCoord -= 10
+                eyeHor(eyeHorInitCoord)
+            elif keyboard.is_pressed('o'):
+                eyeHorInitCoord += 10
+                eyeHor(eyeHorInitCoord)
+            elif keyboard.is_pressed('t'):
+                if eyeVertInitCoord > 2600:
+                    eyeVertInitCoord -= 10
+                eyeVert(eyeVertInitCoord)
+            elif keyboard.is_pressed('g'):
+                if eyeVertInitCoord < 3120:
+                    eyeVertInitCoord += 10
+                eyeVert(eyeVertInitCoord)
+            elif keyboard.is_pressed('z'):
+                servos_off()
+
+            # os.system('cls')
+            # print("Neck Rotation = " + str(neckInitCoord))
+            # print("Right Pillar = " + str(rPillarInitCoord))
+            # print("Left Pillar = " + str(lPillarInitCoord))
+            global uicount
+            uicount += 1
+            if uicount == 5:
+                uicount = 0
+                update_ui()
+            time.sleep(0.005)
+        except KeyboardInterrupt:
+            servos_off()  # if user pressed a key other than the given key the loop will break
+
 
 # post: prints the servo coordinates to the console
-def updateui():
+def update_ui():
     os.system('cls')
     print("Neck Rotation = " + str(neckInitCoord))
     print("Right Pillar = " + str(rPillarInitCoord))
@@ -155,49 +239,51 @@ def updateui():
 #   ry = right eye's vertical position
 #   lx = left eye's horizontal position
 #   ly = left eye's vertical position
-def eyeMove(rx, ry, lx, ly):
+def eye_move(rx, ry, lx, ly):
     servo.setTarget(lHorEye, lx)
     servo.setTarget(lVertEye, ly)
     servo.setTarget(rHorEye, rx)
     servo.setTarget(rVertEye, ry)
 
+
 # post: first prototype of the joystick controller
 #       uses keypad to command the neck to go to a certain location
-def joystickControlV1():
+def keyboard_control_v1():
     initialize()
     accelLim = 0
     velLim = 0
-    setParam(accelLim, velLim)
+    set_param(accelLim, velLim)
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
             if keyboard.is_pressed('q'):  # if key 'q' is pressed
-                rotateNeck(4500)
+                rotate_neck(4500)
             elif keyboard.is_pressed('w'):
-                rotateNeck(5000)
+                rotate_neck(5000)
             elif keyboard.is_pressed('e'):
-                rotateNeck(5500)
+                rotate_neck(5500)
             elif keyboard.is_pressed('r'):
-                rotateNeck(6000)
+                rotate_neck(6000)
             elif keyboard.is_pressed('i'):
-                rotateNeck(6500)
+                rotate_neck(6500)
             elif keyboard.is_pressed('o'):
-                rotateNeck(7000)
+                rotate_neck(7000)
             elif keyboard.is_pressed('p'):
-                rotateNeck(7500)
+                rotate_neck(7500)
             elif keyboard.is_pressed('['):
-                rotateNeck(8000)
+                rotate_neck(8000)
         except KeyboardInterrupt:
-            servosOff()  # if user pressed a key other than the given key the loop will break
+            servos_off()  # if user pressed a key other than the given key the loop will break
+
 
 # post: samples the servo coordinate at each time step provided the servo to be moved, movement settings,
 #       and the final position of the servo
-def stepResponse():
+def step_response():
     initialize('COM7') # check device manager!
     servo.setTarget(11, 2410)
     accelLim = 0
     velLim = 20
     info = [accelLim, velLim]
-    setParam(accelLim, velLim)
+    set_param(accelLim, velLim)
     position = []
     t = []
 
@@ -216,7 +302,8 @@ def stepResponse():
     time.sleep(duration)
 
     scipy.io.savemat('step13.mat', mdict={'pos': position, 't':t, 'info':info})
-    servosOff()
+    servos_off()
+
 
 # post: initializes the Pololu Controller
 def initialize():
@@ -226,6 +313,7 @@ def initialize():
     servo.setTarget(2, 5250)
     # servo.setTarget(11, 2000)
 
+
 # pre: pass in values between 4000 - 6000
 # post: nods the head to the final location
 # parameter: final = final vertical location
@@ -234,35 +322,39 @@ def nod(final):
     servo.setTarget(lPillar, final)
     time.sleep(3)
 
+
 # range : 2,410 - 9600
 # 6,000 : neutral position (looking front)
 # pre: PLEASE HOLD THE ROBOT!!! MIGHT FALL!!!
 #      INITIALLY, THE ACCELERATION IS SUPER HIGH!
 # post: rotates the neck to the final position specified location
 # parameter: final = final neck position
-def rotateNeck(final):
+def rotate_neck(final):
     servo.setTarget(neck, final)
+
 
 # pre: input valid channel number (check the hardware connection)
 # post: sets the maximum acceleration for all the channels
 # parameter:
 #   maxAccel = maximum acceleration allowed (0 is inf)
 #   maxSpeed = maximum speed allowed (0 is inf)
-def setParam(maxAccel, maxSpeed):
+def set_param(maxAccel, maxSpeed):
     # Specific for 12 channel Pololu board
     for ch in range(12):
         servo.setAccel(ch, maxAccel)
         servo.setSpeed(ch, maxSpeed)
 
+
 # post: prints and returns the selected servo's position
-def getPos(ch):
+def get_pos(ch):
     location = servo.getPosition(ch)
     print(location)
     return location
 
+
 # 5000 right 2500 left
 # delay between left and right
-def eyeHor(final):
+def eye_hor(final):
     servo.setTarget(lHorEye, final)
     servo.setTarget(rHorEye, final-500)
 
@@ -271,15 +363,17 @@ def eyeHor(final):
 
 
 # right eye vert movement does not work
-def eyeVert(final):
+def eye_vert(final):
     servo.setTarget(rVertEye, final)
     servo.setTarget(lVertEye, final)
 
+
 # turns all the servos off
-def servosOff():
+def servos_off():
     for ch in range(12):
         servo.setTarget(ch, 0)
 
 
 if __name__ == "__main__":
-    main()
+    keyboard_control_front()
+
