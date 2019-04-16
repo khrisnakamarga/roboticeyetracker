@@ -32,19 +32,19 @@ Ideas
 
 # GLOBAL VARIABLES
 # Pololu Channels
-lHorEye = 0 # Left Eye Horizontal Motion
-rPillar = 1 # Right Neck Pillar
-lPillar = 2 # Left Neck Pillar
-lVertEye = 3 # Left Eye Vertical Motion
-rHorEye = 6 # Right Eye Horizontal Motion
-rVertEye = 7 # Right Eye Vertical Motion
-neck = 11 # Horizontal Neck Motion
-neckInitCoord = 4500
-rPillarInitCoord = 5000
-lPillarInitCoord = 5250
-eyeHorInitCoord = 3000
-eyeVertInitCoord = 3000
-uicount = 1
+lHorEye = 0  # Left Eye Horizontal Motion
+rPillar = 1  # Right Neck Pillar
+lPillar = 2  # Left Neck Pillar
+lVertEye = 3  # Left Eye Vertical Motion
+rHorEye = 6  # Right Eye Horizontal Motion
+rVertEye = 7  # Right Eye Vertical Motion
+neck = 11  # Horizontal Neck Motion
+neckInitCoord = 4500  # faces the front of the test rig
+rPillarInitCoord = 5000  # zero head elevation for the right pillar
+lPillarInitCoord = 5250  # zero head elevation for the left pillar
+eyeHorInitCoord = 3000  # eyes in the middle horizontally
+eyeVertInitCoord = 3000  # eyes in the middle vertically
+uicount = 1  # counter that updates the console UI
 
 # vert eye: 2600 - 3120
 
@@ -279,7 +279,6 @@ def eyeVert(final):
 def servosOff():
     for ch in range(12):
         servo.setTarget(ch, 0)
-
 
 
 if __name__ == "__main__":
