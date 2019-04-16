@@ -275,9 +275,8 @@ def eyeVert(final):
     servo.setTarget(rVertEye, final)
     servo.setTarget(lVertEye, final)
 
-
+# turns all the servos off
 def servosOff():
-    allChannels = 12
     for ch in range(12):
         servo.setTarget(ch, 0)
 
