@@ -14,10 +14,9 @@ Description: This script defines head movements and serves as a client of maestr
              It defines head and eye movements in terms of common terms and the user
              is able to instruct the servos by accessing the movements defined
 To Do:
-1. Implement a function that waits until target is achieved (through a list)
-2. Add more movements
-3. Define limits
-4. isMoving()!!!
+1. Add method that implements servo limitations
+2. Make a class for the channels
+3. Give acceleration/velocity limits to the UI
 
 Ideas
 1. Convert arbitrary servo positions into angles or something understandable
@@ -27,36 +26,8 @@ Ideas
 
 '''
 
-'''
-    # servo.setTarget(1, 5000)
-    # servo.setTarget(2, 5000)
-    # time.sleep(4)
-    # # rotateNeck(6000)
-    # # rotateNeck(8000)
-    # # rotateNeck(4000)
-    # # rotateNeck(6000)
-    # # nod(4000)
-    # # nod(4000)
-    servo.setTarget(1, 5000)
-    servo.setTarget(2, 5000)
-    time.sleep(4)
-    # getPos(0)
-    # # nod(4500)
-    # eyeHor(4000)
-    # eyeHor(2000)
-    # eyeHor(4000)
-    # eyeHor(2000)
-    # getPos(6)
-    # eyeHor(3000)
-    # getPos(6)
-    # for i in range(6):
-    #     rotateNeck(4000)
-    #     rotateNeck(8000)
-'''
-
 # setting a very high value
 # find out the effective pulses
-
 
 
 # GLOBAL VARIABLES
@@ -72,7 +43,10 @@ neckInitCoord = 4500
 rPillarInitCoord = 5000
 lPillarInitCoord = 5250
 eyeHorInitCoord = 3000
+eyeVertInitCoord = 3000
 uicount = 1
+
+# vert eye: 2600 - 3120
 
 def main():
     joystickControlV2()
@@ -91,6 +65,7 @@ def joystickControlV2():
     global rPillarInitCoord
     global lPillarInitCoord
     global eyeHorInitCoord
+    global eyeVertInitCoord
     # for i in range(10):
     #     neckInitCoord += 500
     #     rotateNeck(neckInitCoord)
@@ -141,6 +116,14 @@ def joystickControlV2():
             elif keyboard.is_pressed('p'):
                 eyeHorInitCoord += 10
                 eyeHor(eyeHorInitCoord)
+            elif keyboard.is_pressed('t'):
+                if eyeVertInitCoord > 2600:
+                    eyeVertInitCoord -= 10
+                eyeVert(eyeVertInitCoord)
+            elif keyboard.is_pressed('g'):
+                if eyeVertInitCoord < 3120:
+                    eyeVertInitCoord += 10
+                eyeVert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
                 servosOff()
 
@@ -150,13 +133,14 @@ def joystickControlV2():
             # print("Left Pillar = " + str(lPillarInitCoord))
             global uicount
             uicount += 1
-            if uicount == 20:
+            if uicount == 5:
                 uicount = 0
                 updateui()
             time.sleep(0.005)
         except KeyboardInterrupt:
             servosOff(eyeHorInitCoord)  # if user pressed a key other than the given key the loop will break
 
+# post: prints the servo coordinates to the console
 def updateui():
     os.system('cls')
     print("Neck Rotation = " + str(neckInitCoord))
@@ -164,12 +148,21 @@ def updateui():
     print("Left Pillar = " + str(lPillarInitCoord))
     print("Eyes = " + str(eyeHorInitCoord))
 
+
+# post: moves each eye into a point specified by the coordinated
+# parameter:
+#   rx = right eye's horizontal position
+#   ry = right eye's vertical position
+#   lx = left eye's horizontal position
+#   ly = left eye's vertical position
 def eyeMove(rx, ry, lx, ly):
     servo.setTarget(lHorEye, lx)
     servo.setTarget(lVertEye, ly)
     servo.setTarget(rHorEye, rx)
     servo.setTarget(rVertEye, ry)
 
+# post: first prototype of the joystick controller
+#       uses keypad to command the neck to go to a certain location
 def joystickControlV1():
     initialize()
     accelLim = 0
@@ -196,6 +189,8 @@ def joystickControlV1():
         except KeyboardInterrupt:
             servosOff()  # if user pressed a key other than the given key the loop will break
 
+# post: samples the servo coordinate at each time step provided the servo to be moved, movement settings,
+#       and the final position of the servo
 def stepResponse():
     initialize('COM7') # check device manager!
     servo.setTarget(11, 2410)
@@ -246,11 +241,7 @@ def nod(final):
 # post: rotates the neck to the final position specified location
 # parameter: final = final neck position
 def rotateNeck(final):
-    # servo.setAccel(neck, 1) #faster response
-    # servo.setSpeed(neck, 1) #faster response
     servo.setTarget(neck, final)
-    # while servo.getPosition(neck) != final:
-    #     time.sleep(0.5)
 
 # pre: input valid channel number (check the hardware connection)
 # post: sets the maximum acceleration for all the channels
@@ -280,13 +271,9 @@ def eyeHor(final):
 
 
 # right eye vert movement does not work
-# def eyeVert(final):
-#     verEye = 3
-#     verEyeR = 7
-#     servo.setTarget(horEye, final)
-#     while servo.getPosition(verEye) != final & \
-#           servo.getPosition(verEyeR) != final:
-#           time.sleep(0.5)
+def eyeVert(final):
+    servo.setTarget(rVertEye, final)
+    servo.setTarget(lVertEye, final)
 
 
 def servosOff():
