@@ -114,33 +114,32 @@ def keyboard_control_front():
                 rotate_neck(neckInitCoord)
             elif keyboard.is_pressed('o'):
                 eyeHorInitCoord -= 10
-                eyeHor(eyeHorInitCoord)
+                eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('p'):
                 eyeHorInitCoord += 10
-                eyeHor(eyeHorInitCoord)
+                eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('t'):
                 if eyeVertInitCoord > 2600:
                     eyeVertInitCoord -= 10
-                eyeVert(eyeVertInitCoord)
+                eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('g'):
                 if eyeVertInitCoord < 3120:
                     eyeVertInitCoord += 10
-                eyeVert(eyeVertInitCoord)
+                eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
                 servos_off()
+            # else:
+            #     servos_off()
 
-            # os.system('cls')
-            # print("Neck Rotation = " + str(neckInitCoord))
-            # print("Right Pillar = " + str(rPillarInitCoord))
-            # print("Left Pillar = " + str(lPillarInitCoord))
             global uicount
             uicount += 1
             if uicount == 5:
                 uicount = 0
                 update_ui()
-            time.sleep(0.005)
+            time.sleep(0.05)
         except KeyboardInterrupt:
             servos_off()  # if user pressed a key other than the given key the loop will break
+            exit()
 
 
 # mirrored
