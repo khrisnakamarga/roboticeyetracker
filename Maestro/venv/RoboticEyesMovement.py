@@ -46,12 +46,12 @@ eyeHorInitCoord = 3000  # eyes in the middle horizontally
 eyeVertInitCoord = 3000  # eyes in the middle vertically
 uicount = 1  # counter that updates the console UI
 
-# vert eye: 2600 - 3120
 
-#LIMITS
-#neck 9600 2800
-#rpillar 5810 4030
-#lpillar 5920 4140
+# LIMITS
+# neck 9600 2800
+# right pillar 5810 4030
+# left pillar 5920 4140
+# vertical eye: 2600 - 3120
 
 
 # second version of the joystick controller
@@ -372,7 +372,32 @@ def servos_off():
     for ch in range(12):
         servo.setTarget(ch, 0)
 
+def test():
+    initialize()
+    accelLim = 0
+    velLim = 0
+    set_param(accelLim, velLim)
+    global neckInitCoord
+    global rPillarInitCoord
+    global lPillarInitCoord
+    global eyeHorInitCoord
+    global eyeVertInitCoord
+    eyeVertInitCoord += 50
+    eye_vert(eyeVertInitCoord)
+    for vertical in range(7):
+        eyeVertInitCoord -= 25
+        eye_vert(eyeVertInitCoord)
+        for horizontal in range(20):
+            eyeHorInitCoord += 30
+            eye_hor(eyeHorInitCoord)
+            time.sleep(0.2)
+        eyeHorInitCoord = 3000
+
+
+eyeVertInitCoord = 3000  # eyes in the middle vertically
+
 
 if __name__ == "__main__":
-    keyboard_control_front()
-
+    # keyboard_control_front()
+    test()
+    servos_off()
