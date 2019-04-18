@@ -68,11 +68,6 @@ def keyboard_control_front():
     global lPillarInitCoord
     global eyeHorInitCoord
     global eyeVertInitCoord
-    # for i in range(10):
-    #     neckInitCoord += 500
-    #     rotate_neck(neckInitCoord)
-    #     time.sleep(1)
-    # t1 = threading.Thread(target=textUI)
 
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
