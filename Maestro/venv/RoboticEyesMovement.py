@@ -380,21 +380,69 @@ def test():
     global eyeVertInitCoord
     eyeVertInitCoord += 50
     eye_vert(eyeVertInitCoord)
-    rotate_neck(neckInitCoord)
-    for vertical in range(7):
-        eyeVertInitCoord -= 25
+    rotate_neck(neckInitCoord+1500)
+    # eyeVertInitCoord -= 12
+    for vertical in range(8):
+        eyeVertInitCoord -= 12.5
         eye_vert(eyeVertInitCoord)
         for horizontal in range(20):
             eyeHorInitCoord += 30
             eye_hor(eyeHorInitCoord)
             time.sleep(0.2)  # adjust for the speed of laser movement
-        eyeHorInitCoord = 3000
+        eyeHorInitCoord = 2420
 
-
+eyeHorInitCoord = 2420
 eyeVertInitCoord = 3000  # eyes in the middle vertically
+
+def x_map(x_screen):
+    return 3020 - (x_screen * 30)
+
+
+def y_map(y_screen):
+    return 3000 - (y_screen * 25) + 12.5
+
+
+def trajectory():
+    initialize()
+    accelLim = 0
+    velLim = 5
+    set_param(accelLim, velLim)
+    global neckInitCoord
+    global rPillarInitCoord
+    global lPillarInitCoord
+    global eyeHorInitCoord
+    global eyeVertInitCoord
+    eyeVertInitCoord += 50
+    eye_vert(eyeVertInitCoord)
+    rotate_neck(neckInitCoord + 1500)
+    eye_hor(x_map(0))
+    eye_vert(y_map(0))
+    time.sleep(1)
+
+    sleepytime = 1
+
+    # eye_hor(x_map(10.5))
+    # eye_vert(y_map(0))
+    # time.sleep(sleepytime)
+
+    eye_hor(x_map(10.5))
+    eye_vert(y_map(5))
+    time.sleep(sleepytime)
+
+    # eye_hor(x_map(0))
+    # eye_vert(y_map(5))
+    # time.sleep(sleepytime)
+
+    eye_hor(x_map(0))
+    eye_vert(y_map(0))
+    time.sleep(sleepytime)
+
+    # eye_hor(x_map(13))
+    # eye_vert(y_map(0))
+    # time.sleep(4)
 
 
 if __name__ == "__main__":
     # keyboard_control_front()
-    test()
+    trajectory()
     servos_off()
