@@ -367,6 +367,7 @@ def servos_off():
     for ch in range(12):
         servo.setTarget(ch, 0)
 
+
 def test():
     initialize()
     accelLim = 0
@@ -379,13 +380,14 @@ def test():
     global eyeVertInitCoord
     eyeVertInitCoord += 50
     eye_vert(eyeVertInitCoord)
+    rotate_neck(neckInitCoord)
     for vertical in range(7):
         eyeVertInitCoord -= 25
         eye_vert(eyeVertInitCoord)
         for horizontal in range(20):
             eyeHorInitCoord += 30
             eye_hor(eyeHorInitCoord)
-            time.sleep(0.2)
+            time.sleep(0.2)  # adjust for the speed of laser movement
         eyeHorInitCoord = 3000
 
 
