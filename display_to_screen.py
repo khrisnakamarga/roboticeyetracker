@@ -3,7 +3,7 @@ from graphics import *
 # creates a 1366 x 768 black window (EASY TO CHANGE) and
 # draws a 3 x 2 grid of blue dots equally spaced.
 # clicking the screen will close program.
-def main():
+def display_to_screen():
     # background size and color
     # 16:9 aspect ratio window size
     screenx = 1366
@@ -48,4 +48,4 @@ def main():
     win.getMouse()
     win.close()
 
-main()
+display_to_screen()
