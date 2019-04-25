@@ -273,7 +273,7 @@ def keyboard_control_v1():
 # post: samples the servo coordinate at each time step provided the servo to be moved, movement settings,
 #       and the final position of the servo
 def step_response():
-    initialize('COM7') # check device manager!
+    initialize('COM3') # check device manager!
     servo.setTarget(11, 2410)
     accelLim = 0
     velLim = 20
@@ -303,7 +303,7 @@ def step_response():
 # post: initializes the Pololu Controller
 def initialize():
     global servo
-    servo = maestro.Controller('COM7')
+    servo = maestro.Controller('COM4')
     servo.setTarget(1, 5000)
     servo.setTarget(2, 5250)
     # servo.setTarget(11, 2000)
