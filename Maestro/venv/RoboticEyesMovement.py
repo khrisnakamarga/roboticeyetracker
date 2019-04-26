@@ -17,6 +17,7 @@ To Do:
 1. Add method that implements servo limitations
 2. Make a class for the channels
 3. Give acceleration/velocity limits to the UI
+4. Make a script that installs all the libraries
 
 Ideas
 1. Convert arbitrary servo positions into angles or something understandable
@@ -273,7 +274,7 @@ def keyboard_control_v1():
 # post: samples the servo coordinate at each time step provided the servo to be moved, movement settings,
 #       and the final position of the servo
 def step_response():
-    initialize('COM7') # check device manager!
+    initialize('COM6') # check device manager!
     servo.setTarget(11, 2410)
     accelLim = 0
     velLim = 20
@@ -304,8 +305,9 @@ def step_response():
 def initialize():
     global servo
     servo = maestro.Controller('COM7')
-    servo.setTarget(1, 5000)
-    servo.setTarget(2, 5250)
+    servo.setTarget(1, 4900)
+    servo.setTarget(2, 5100)
+    time.sleep(1)
     # servo.setTarget(11, 2000)
 
 
@@ -372,7 +374,7 @@ def servos_off():
 
 
 def test():
-    initialize()
+    # initialize()
     accelLim = 0
     velLim = 0
     set_param(accelLim, velLim)
@@ -383,6 +385,7 @@ def test():
     global eyeVertInitCoord
     eye_vert(eyeVertInitCoord)
     rotate_neck(neckInitCoord+1500)
+    time.sleep(1)
     # eyeVertInitCoord -= 12
     for vertical in range(5):
         eyeVertInitCoord -= 30
@@ -390,7 +393,7 @@ def test():
         for horizontal in range(16):
             eyeHorInitCoord += 30
             eye_hor(eyeHorInitCoord)
-            time.sleep(0.2)  # adjust for the speed of laser movement
+            time.sleep(0.2) #ajust for the speed of laser movement
 
             get_pos(rVertEye)
             print(eyeVertInitCoord - 500)
@@ -468,8 +471,8 @@ def trajectory():
     global lPillarInitCoord
     global eyeHorInitCoord
     global eyeVertInitCoord
-    eyeVertInitCoord += 50
-    eye_vert(eyeVertInitCoord)
+    # eyeVertInitCoord += 50
+    # eye_vert(eyeVertInitCoord)
     rotate_neck(neckInitCoord + 1500)
     eye_hor(x_map(0))
     eye_vert(y_map(0))
@@ -497,24 +500,28 @@ def trajectory():
     # eye_vert(y_map(2))
     # time.sleep(sleepytime)
 
-    eye_hor(x_map(0))
-    eye_vert(y_map(0))
-    time.sleep(sleepytime)
-
-    eye_hor(x_map(5))
-    eye_vert(y_map(0))
-    time.sleep(sleepytime)
-
-    eye_hor(x_map(5))
+    eye_hor(x_map(1))
     eye_vert(y_map(1))
     time.sleep(sleepytime)
 
-    eye_hor(x_map(0))
+    eye_hor(x_map(2))
     eye_vert(y_map(1))
     time.sleep(sleepytime)
 
-    eye_hor(x_map(0))
-    eye_vert(y_map(0))
+    eye_hor(x_map(2))
+    eye_vert(y_map(2))
+    time.sleep(sleepytime)
+
+    eye_hor(x_map(1))
+    eye_vert(y_map(2))
+    time.sleep(sleepytime)
+
+    # eye_hor(x_map(0))
+    # eye_vert(y_map(0))
+    # time.sleep(1)
+
+    eye_hor(x_map(1))
+    eye_vert(y_map(1))
     time.sleep(sleepytime)
 
 
@@ -530,6 +537,13 @@ def trajectory():
     # moveEye(1, 1)
 
 
+def stare_to_point(x, y):
+    sleepytime = 1
+    eye_hor(x_map(x))
+    eye_vert(y_map(y))
+    time.sleep(sleepytime)
+
+
 def move_wait(channel, final):
     servo.setTarget(channel, final)
     while True:
@@ -537,32 +551,15 @@ def move_wait(channel, final):
             break
 
 
+def main():
+    # initialize()
+    test()
+    servos_off()
+
 if __name__ == "__main__":
     # initialize()
-    # accelLim = 10
-    # velLim = 10
-    # set_param(accelLim, velLim)
-    # servo.setTarget(neck, 6000)
-    # time.sleep(1)
-    # servo.setTarget(neck, 6000)
-    # while True:
-    #     # time.sleep(0.1)
-    #     if servo.getPosition(neck) == 6000:
-    #         break
-    #
-    # servo.setTarget(neck, 4000)
-    # while True:
-    #     # time.sleep(0.1)
-    #     if servo.getPosition(neck) == 4000:
-    #         break
-    #
-    # servo.setTarget(neck, 6000)
-    # while True:
-    #     # time.sleep(0.1)
-    #     if servo.getPosition(neck) == 6000:
-    #         break
-    trajectory()
-    # test()
-    servos_off()
+    # stare_to_point(6, 6)poooooooooooooooooooooopppppppppppppppoooooooooooppppppppppppppppoooooooooooooooooppppppppppppppppppppooooooooooopppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooppppppppppppppppooooppppppppoooooooppppppppprtgtgttggtgtgtgtgtgt
+    keyboard_control_front()
+    # servos_off()
 
 # new limit: 2870
