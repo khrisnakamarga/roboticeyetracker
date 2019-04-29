@@ -274,7 +274,6 @@ def keyboard_control_v1():
 # post: samples the servo coordinate at each time step provided the servo to be moved, movement settings,
 #       and the final position of the servo
 def step_response():
-    initialize('COM6') # check device manager!
     servo.setTarget(11, 2410)
     accelLim = 0
     velLim = 20
@@ -558,7 +557,7 @@ def main():
 
 if __name__ == "__main__":
     # initialize()
-    # stare_to_point(6, 6)poooooooooooooooooooooopppppppppppppppoooooooooooppppppppppppppppoooooooooooooooooppppppppppppppppppppooooooooooopppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooppppppppppppppppooooppppppppoooooooppppppppprtgtgttggtgtgtgtgtgt
+    # stare_to_point(6, 6)
     keyboard_control_front()
     # servos_off()
 
