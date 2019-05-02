@@ -132,7 +132,7 @@ def keyboard_control_front():
             if uicount == 5:
                 uicount = 0
                 update_ui()
-            time.sleep(0.01)
+            time.sleep(0.05)
         except KeyboardInterrupt:
             servos_off()  # if user pressed a key other than the given key the loop will break
             exit()
@@ -214,7 +214,7 @@ def keyboard_control_back():
             if uicount == 5:
                 uicount = 0
                 update_ui()
-            time.sleep(0.005)
+            time.sleep(0.001)
         except KeyboardInterrupt:
             servos_off()  # if user pressed a key other than the given key the loop will break
 
@@ -227,6 +227,7 @@ def update_ui():
     # print("Left Pillar = " + str(lPillarInitCoord))
     print("Hor Eyes = " + str(eyeHorInitCoord))
     print("Vert Eyes = " + str(eyeVertInitCoord))
+    print("Neck = " + str(neckInitCoord))
 
 
 # post: moves each eye into a point specified by the coordinated
@@ -460,6 +461,48 @@ def understandingGetPos():
     time.sleep(1)
 
 
+class Shapes(object):
+    # draws a rectangle with x and y as starting points and l1 and l2 as the sides
+    @staticmethod
+    def rectangle(x, y, l1, l2):
+        sleepytime = 1
+        eye_hor(x_map(x))
+        eye_vert(y_map(y))
+        time.sleep(sleepytime)
+
+        eye_hor(x_map(x + l1))
+        eye_vert(y_map(y))
+        time.sleep(sleepytime)
+
+        eye_hor(x_map(x + l1))
+        eye_vert(y_map(y + l2))
+        time.sleep(sleepytime)
+
+        eye_hor(x_map(x))
+        eye_vert(y_map(y + l2))
+        time.sleep(sleepytime)
+
+        eye_hor(x_map(x))
+        eye_vert(y_map(y))
+        time.sleep(sleepytime)
+
+    @staticmethod
+    # draw a square with sides = side
+    def square(x, y, side):
+        rectangle(x, y, side, side)
+
+    @staticmethod
+    # draw a triangle
+    def circle(x, y, radius):
+        theta = numpy.linspace(0, 2*numpy.pi, 0.01)
+        for i in theta:
+            eye_hor(x_map(x + radius*numpy.cos(i)))
+            eye_vert(y_map(y + radius*numpy.sin(i)))
+            time.sleep(0.1)
+
+
+
+
 def trajectory():
     initialize()
     accelLim = 3
@@ -557,6 +600,7 @@ def main():
 
 if __name__ == "__main__":
     # initialize()
+    # Shapes.circle(1, 1, 3)
     # stare_to_point(6, 6)
     keyboard_control_front()
     # servos_off()

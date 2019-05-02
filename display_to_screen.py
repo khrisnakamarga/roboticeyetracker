@@ -6,8 +6,13 @@ from PyQt5.QtCore import Qt
 class MockCalibration(QWidget):
 
     def __init__(self):
-        self.screenx = 1920
-        self.screeny = 1080
+        # # willie's screen
+        # self.screenx = 1920
+        # self.screeny = 1080
+
+        # khrisna's screen
+        self.screenx = 3840
+        self.screeny = 2160
 
         super().__init__()
         self.initUI()
