@@ -1,6 +1,6 @@
 import maestro  # maestro library
 import time  # for sleeping
-import numpy
+import numpy as np
 import scipy.io
 import keyboard
 import os
@@ -72,32 +72,33 @@ def keyboard_control_front():
 
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
+            resolution = 5
             if keyboard.is_pressed('q'):  # if key 'q' is pressed
                 if rPillarInitCoord > 4030:
-                    rPillarInitCoord -= 10
+                    rPillarInitCoord -= resolution
                 if lPillarInitCoord < 5920:
-                    lPillarInitCoord += 10
+                    lPillarInitCoord += resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('e'):
                 if rPillarInitCoord < 5810:
-                    rPillarInitCoord += 10
+                    rPillarInitCoord += resolution
                 if lPillarInitCoord > 4140:
-                    lPillarInitCoord -= 10
+                    lPillarInitCoord -= resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('w'):
                 if rPillarInitCoord < 5810:
-                    rPillarInitCoord += 10
+                    rPillarInitCoord += resolution
                 if lPillarInitCoord < 5920:
-                    lPillarInitCoord += 10
+                    lPillarInitCoord += resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('s'):
                 if rPillarInitCoord > 4030:
-                    rPillarInitCoord -= 10
+                    rPillarInitCoord -= resolution
                 if lPillarInitCoord > 4140:
-                    lPillarInitCoord -= 10
+                    lPillarInitCoord -= resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('a'):
@@ -109,18 +110,18 @@ def keyboard_control_front():
                     neckInitCoord += 100
                 rotate_neck(neckInitCoord)
             elif keyboard.is_pressed('o'):
-                eyeHorInitCoord -= 10
+                eyeHorInitCoord -= resolution
                 eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('p'):
-                eyeHorInitCoord += 10
+                eyeHorInitCoord += resolution
                 eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('t'):
                 # if eyeVertInitCoord > 2600:
-                eyeVertInitCoord -= 10
+                eyeVertInitCoord -= resolution
                 eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('g'):
                 # if eyeVertInitCoord < 3120:
-                eyeVertInitCoord += 10
+                eyeVertInitCoord += resolution
                 eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
                 servos_off()
@@ -407,8 +408,8 @@ def test():
 # too close to the edge
 # eyeHorInitCoord = 2500
 # eyeVertInitCoord = 2890  # eyes in the middle vertically
-eyeHorInitCoord = 2700
-eyeVertInitCoord = 2800
+eyeHorInitCoord = 3100
+eyeVertInitCoord = 2630
 
 
 # converts x screen coordinate to servo coordinate
@@ -494,10 +495,10 @@ class Shapes(object):
     @staticmethod
     # draw a triangle
     def circle(x, y, radius):
-        theta = numpy.linspace(0, 2*numpy.pi, 0.01)
+        theta = np.linspace(0, 2*np.pi, 0.01)
         for i in theta:
-            eye_hor(x_map(x + radius*numpy.cos(i)))
-            eye_vert(y_map(y + radius*numpy.sin(i)))
+            eye_hor(x_map(x + radius*np.cos(i)))
+            eye_vert(y_map(y + radius*np.sin(i)))
             time.sleep(0.1)
 
 
@@ -581,8 +582,8 @@ def trajectory():
 
 def stare_to_point(x, y):
     sleepytime = 1
-    eye_hor(x_map(x))
-    eye_vert(y_map(y))
+    eye_hor(x)
+    eye_vert(y)
     time.sleep(sleepytime)
 
 
@@ -591,6 +592,17 @@ def move_wait(channel, final):
     while True:
         if servo.getPosition(channel) == final:
             break
+
+
+def grid():
+    x = np.arange(1, 11, 1)
+    y = np.arange(1, 5, 1)
+    # debugging
+    # print(x)
+    # print(y)
+    xx, yy = np.meshgrid(x, y)
+    X_screen = [[3840, 3795, 3685, 3625, 3555, 3490, 3430, 3370, 3315],
+                [3865, 3800, 3740, 36]]
 
 
 def main():
@@ -602,7 +614,8 @@ if __name__ == "__main__":
     # initialize()
     # Shapes.circle(1, 1, 3)
     # stare_to_point(6, 6)
-    keyboard_control_front()
+    # keyboard_control_front()
     # servos_off()
+    grid();
 
 # new limit: 2870
