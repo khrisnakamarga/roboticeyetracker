@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="41767244-7f56-4e6f-b38b-591ebbd158cb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Maestro/venv/RoboticEyesMovement.py" beforeDir="false" afterPath="$PROJECT_DIR$/Maestro/venv/RoboticEyesMovement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/display_to_screen.py" beforeDir="false" afterPath="$PROJECT_DIR$/display_to_screen.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/save_servo_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/save_servo_state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servo_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/servo_control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_run.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/user_interface.py" afterDir="false" />
-    </list>
+    <list default="true" id="41767244-7f56-4e6f-b38b-591ebbd158cb" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,11 +19,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Maestro/venv/RoboticEyesMovement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2341">
-              <caret line="396" column="19" lean-forward="true" selection-start-line="396" selection-start-column="19" selection-end-line="396" selection-end-column="19" />
+            <state relative-caret-position="249">
+              <caret line="588" column="26" lean-forward="true" selection-start-line="588" selection-start-column="26" selection-end-line="588" selection-end-column="26" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
               </folding>
@@ -48,14 +40,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/display_to_screen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="374">
+              <caret line="31" column="67" lean-forward="true" selection-start-line="31" selection-start-column="67" selection-end-line="31" selection-end-column="67" />
             </state>
           </provider>
         </entry>
@@ -73,27 +62,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Maestro/venv/RoboticEyesMovement.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="280" column="15" lean-forward="true" selection-start-line="280" selection-start-column="15" selection-end-line="280" selection-end-column="15" />
-              <folding>
-                <element signature="e#0#33#0" expanded="true" />
-                <element signature="e#1902#4925#0" />
-                <element signature="e#4972#8139#0" />
-                <element signature="e#8215#8431#0" />
-                <element signature="e#8705#8834#0" />
-                <element signature="e#8989#9964#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/user_interface.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
@@ -138,17 +110,16 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="41" />
+    <option name="x" value="40" />
     <option name="y" value="30" />
-    <option name="width" value="1940" />
-    <option name="height" value="1100" />
+    <option name="width" value="1941" />
+    <option name="height" value="1101" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -180,11 +151,12 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="settings.editor.selected.configurable" value="pyconsole" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.build" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -198,7 +170,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.display_to_screen">
+  <component name="RunManager" selected="Python.RoboticEyesMovement">
     <configuration name="RoboticEyesMovement" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="roboticeyetracker" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -264,10 +236,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.A" />
-        <item itemvalue="Python.scratch" />
-        <item itemvalue="Python.display_to_screen" />
         <item itemvalue="Python.RoboticEyesMovement" />
+        <item itemvalue="Python.display_to_screen" />
+        <item itemvalue="Python.scratch" />
       </list>
     </recent_temporary>
   </component>
@@ -285,10 +256,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
+    <frame x="-7" y="-7" width="1721" height="944" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21414408" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21364985" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -365,22 +336,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Maestro/venv/RoboticEyesMovement.py">
+    <entry file="file://$PROJECT_DIR$/user_interface.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2341">
-          <caret line="396" column="19" lean-forward="true" selection-start-line="396" selection-start-column="19" selection-end-line="396" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="119">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/display_to_screen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        <state relative-caret-position="374">
+          <caret line="31" column="67" lean-forward="true" selection-start-line="31" selection-start-column="67" selection-end-line="31" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Maestro/venv/RoboticEyesMovement.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="588" column="26" lean-forward="true" selection-start-line="588" selection-start-column="26" selection-end-line="588" selection-end-column="26" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
