@@ -18,6 +18,7 @@ To Do:
 1. Add method that implements servo limitations
 2. Make a class for the channels
 3. Give acceleration/velocity limits to the UI
+4. Make a script that installs all the libraries
 
 Ideas
 1. Convert arbitrary servo positions into angles or something understandable
@@ -114,12 +115,12 @@ def keyboard_control_front():
                 eyeHorInitCoord += 10
                 eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('t'):
-                if eyeVertInitCoord > 2600:
-                    eyeVertInitCoord -= 10
+                # if eyeVertInitCoord > 2600:
+                eyeVertInitCoord -= 10
                 eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('g'):
-                if eyeVertInitCoord < 3120:
-                    eyeVertInitCoord += 10
+                # if eyeVertInitCoord < 3120:
+                eyeVertInitCoord += 10
                 eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
                 servos_off()
@@ -213,7 +214,7 @@ def keyboard_control_back():
             if uicount == 5:
                 uicount = 0
                 update_ui()
-            time.sleep(0.005)
+            time.sleep(0.001)
         except KeyboardInterrupt:
             servos_off()  # if user pressed a key other than the given key the loop will break
 
@@ -221,10 +222,12 @@ def keyboard_control_back():
 # post: prints the servo coordinates to the console
 def update_ui():
     os.system('cls')
-    print("Neck Rotation = " + str(neckInitCoord))
-    print("Right Pillar = " + str(rPillarInitCoord))
-    print("Left Pillar = " + str(lPillarInitCoord))
-    print("Eyes = " + str(eyeHorInitCoord))
+    # print("Neck Rotation = " + str(neckInitCoord))
+    # print("Right Pillar = " + str(rPillarInitCoord))
+    # print("Left Pillar = " + str(lPillarInitCoord))
+    print("Hor Eyes = " + str(eyeHorInitCoord))
+    print("Vert Eyes = " + str(eyeVertInitCoord))
+    print("Neck = " + str(neckInitCoord))
 
 
 # post: moves each eye into a point specified by the coordinated
@@ -275,7 +278,6 @@ def keyboard_control_v1():
 # post: samples the servo coordinate at each time step provided the servo to be moved, movement settings,
 #       and the final position of the servo
 def step_response():
-    initialize('COM7') # check device manager!
     servo.setTarget(11, 2410)
     accelLim = 0
     velLim = 20
@@ -292,7 +294,7 @@ def step_response():
     servo.setTarget(11, 9600)
     start = time.time()
     while time.time() - start <= duration:
-        time.sleep(0.1);
+        time.sleep(0.1)
         position.append(servo.getPosition(11))
         t.append(time.time() - start)
 
@@ -306,8 +308,9 @@ def step_response():
 def initialize():
     global servo
     servo = maestro.Controller('COM7')
-    servo.setTarget(1, 5000)
-    servo.setTarget(2, 5250)
+    servo.setTarget(1, 4900)
+    servo.setTarget(2, 5100)
+    time.sleep(1)
     # servo.setTarget(11, 2000)
 
 
@@ -352,8 +355,10 @@ def get_pos(ch):
 # 5000 right 2500 left
 # delay between left and right
 def eye_hor(final):
+    # move_wait(lHorEye, final)
+    # move_wait(rHorEye, final-500)
     servo.setTarget(lHorEye, final)
-    servo.setTarget(rHorEye, final-500)
+    servo.setTarget(rHorEye, final)
 
 
 # def eyeHorBoth(final):
@@ -372,7 +377,7 @@ def servos_off():
 
 
 def test():
-    initialize()
+    # initialize()
     accelLim = 0
     velLim = 0
     set_param(accelLim, velLim)
@@ -381,42 +386,138 @@ def test():
     global lPillarInitCoord
     global eyeHorInitCoord
     global eyeVertInitCoord
-    eyeVertInitCoord += 50
     eye_vert(eyeVertInitCoord)
     rotate_neck(neckInitCoord+1500)
+    time.sleep(1)
     # eyeVertInitCoord -= 12
-    for vertical in range(8):
-        eyeVertInitCoord -= 12.5
+    for vertical in range(5):
+        eyeVertInitCoord -= 30
         eye_vert(eyeVertInitCoord)
-        for horizontal in range(20):
+        for horizontal in range(16):
             eyeHorInitCoord += 30
             eye_hor(eyeHorInitCoord)
-            time.sleep(0.2)  # adjust for the speed of laser movement
-        eyeHorInitCoord = 2420
+            time.sleep(0.2) #ajust for the speed of laser movement
 
-eyeHorInitCoord = 2420
-eyeVertInitCoord = 3000  # eyes in the middle vertically
+            get_pos(rVertEye)
+            print(eyeVertInitCoord - 500)
+            print()
+            get_pos(rHorEye)
+            print(eyeHorInitCoord - 500)
+            print()
+        eyeHorInitCoord = 2700
 
+
+# too close to the edge
+# eyeHorInitCoord = 2500
+# eyeVertInitCoord = 2890  # eyes in the middle vertically
+eyeHorInitCoord = 2700
+eyeVertInitCoord = 2800
+
+
+# converts x screen coordinate to servo coordinate
 def x_map(x_screen):
-    return 3020 - (x_screen * 30)
+    return 3180 - (x_screen * 30)
 
 
+# converts y screen coordinate to servo coordinate
 def y_map(y_screen):
-    return 3000 - (y_screen * 25) + 12.5
+    return 2770 - (y_screen * 30)
+
+
+def moveEye(x_screen, y_screen):
+    eye_hor(x_map(x_screen))
+    eye_vert(y_map(y_screen))
+    time.sleep(5)
+
+def move_eye_together(x_screen, y_screen):
+    err_tresh = 5
+    x_step = x_map(x_screen)
+    y_step = y_map(y_screen)
+    x_error = servo.getPosition(rHorEye) - x_step
+    y_error = servo.getPosition(rVertEye) - y_step
+    while (abs(x_error) > err_tresh) & (abs(y_error) > err_tresh):
+        x_temp = servo.getPosition(rHorEye)
+        y_temp = servo.getPosition(rVertEye)
+        if x_error < 0:
+            eye_hor(servo.getPosition(rHorEye) + 2)
+        else:
+            eye_hor(servo.getPosition(rHorEye) - 2)
+        if y_error < 0:
+            eye_vert(servo.getPosition(rVertEye) + 2)
+        else:
+            eye_vert(servo.getPosition(rVertEye) - 2)
+        time.sleep(0.01)
+        x_step = x_map(x_screen)
+        y_step = y_map(y_screen)
+        x_error = servo.getPosition(rHorEye) - x_step
+        y_error = servo.getPosition(rVertEye) - y_step
+
+
+# lesson learned: get pos actually gives u the servo coordinate
+# replace global coordinates with gets
+def understandingGetPos():
+    get_pos(neck)
+    servo.setTarget(neck, 3000)
+    get_pos(neck)
+    servo.setTarget(neck, 6000)
+    get_pos(neck)
+    time.sleep(1)
+
+
+class Shapes(object):
+    # draws a rectangle with x and y as starting points and l1 and l2 as the sides
+    @staticmethod
+    def rectangle(x, y, l1, l2):
+        sleepytime = 1
+        eye_hor(x_map(x))
+        eye_vert(y_map(y))
+        time.sleep(sleepytime)
+
+        eye_hor(x_map(x + l1))
+        eye_vert(y_map(y))
+        time.sleep(sleepytime)
+
+        eye_hor(x_map(x + l1))
+        eye_vert(y_map(y + l2))
+        time.sleep(sleepytime)
+
+        eye_hor(x_map(x))
+        eye_vert(y_map(y + l2))
+        time.sleep(sleepytime)
+
+        eye_hor(x_map(x))
+        eye_vert(y_map(y))
+        time.sleep(sleepytime)
+
+    @staticmethod
+    # draw a square with sides = side
+    def square(x, y, side):
+        rectangle(x, y, side, side)
+
+    @staticmethod
+    # draw a triangle
+    def circle(x, y, radius):
+        theta = numpy.linspace(0, 2*numpy.pi, 0.01)
+        for i in theta:
+            eye_hor(x_map(x + radius*numpy.cos(i)))
+            eye_vert(y_map(y + radius*numpy.sin(i)))
+            time.sleep(0.1)
+
+
 
 
 def trajectory():
     initialize()
-    accelLim = 0
-    velLim = 5
+    accelLim = 3
+    velLim = 3
     set_param(accelLim, velLim)
     global neckInitCoord
     global rPillarInitCoord
     global lPillarInitCoord
     global eyeHorInitCoord
     global eyeVertInitCoord
-    eyeVertInitCoord += 50
-    eye_vert(eyeVertInitCoord)
+    # eyeVertInitCoord += 50
+    # eye_vert(eyeVertInitCoord)
     rotate_neck(neckInitCoord + 1500)
     eye_hor(x_map(0))
     eye_vert(y_map(0))
@@ -424,28 +525,87 @@ def trajectory():
 
     sleepytime = 1
 
-    # eye_hor(x_map(10.5))
-    # eye_vert(y_map(0))
+    # eye_hor(x_map(3))
+    # eye_vert(y_map(2))
+    # time.sleep(sleepytime)
+    #
+    # eye_hor(x_map(5))
+    # eye_vert(y_map(2))
+    # time.sleep(sleepytime)
+    #
+    # eye_hor(x_map(5))
+    # eye_vert(y_map(4))
+    # time.sleep(sleepytime)
+    #
+    # eye_hor(x_map(3))
+    # eye_vert(y_map(4))
+    # time.sleep(sleepytime)
+    #
+    # eye_hor(x_map(3))
+    # eye_vert(y_map(2))
     # time.sleep(sleepytime)
 
-    eye_hor(x_map(10.5))
-    eye_vert(y_map(5))
+    eye_hor(x_map(1))
+    eye_vert(y_map(1))
+    time.sleep(sleepytime)
+
+    eye_hor(x_map(2))
+    eye_vert(y_map(1))
+    time.sleep(sleepytime)
+
+    eye_hor(x_map(2))
+    eye_vert(y_map(2))
+    time.sleep(sleepytime)
+
+    eye_hor(x_map(1))
+    eye_vert(y_map(2))
     time.sleep(sleepytime)
 
     # eye_hor(x_map(0))
-    # eye_vert(y_map(5))
-    # time.sleep(sleepytime)
+    # eye_vert(y_map(0))
+    # time.sleep(1)
 
-    eye_hor(x_map(0))
-    eye_vert(y_map(0))
+    eye_hor(x_map(1))
+    eye_vert(y_map(1))
     time.sleep(sleepytime)
+
+
 
     # eye_hor(x_map(13))
     # eye_vert(y_map(0))
     # time.sleep(4)
 
+    # moveEye(1, 1)
+    # moveEye(2, 1)
+    # moveEye(2, 2)
+    # moveEye(1, 1)
+    # moveEye(1, 1)
+
+
+def stare_to_point(x, y):
+    sleepytime = 1
+    eye_hor(x_map(x))
+    eye_vert(y_map(y))
+    time.sleep(sleepytime)
+
+
+def move_wait(channel, final):
+    servo.setTarget(channel, final)
+    while True:
+        if servo.getPosition(channel) == final:
+            break
+
+
+def main():
+    # initialize()
+    test()
+    servos_off()
 
 if __name__ == "__main__":
-    # keyboard_control_front()
-    trajectory()
-    servos_off()
+    # initialize()
+    # Shapes.circle(1, 1, 3)
+    # stare_to_point(6, 6)
+    keyboard_control_front()
+    # servos_off()
+
+# new limit: 2870
