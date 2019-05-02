@@ -7,3 +7,4 @@ servo.setSpeed(1,4)     #set speed of servo 1
 x = servo.getPosition(1) #get the current position of servo 1
 print(x)
 servo.close()
+

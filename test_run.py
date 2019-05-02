@@ -26,6 +26,9 @@ import numpy
 
 def program_run():
     while True:  # calibration mode
+
+
+        """
         if MODEFLAG:   #calibration mode
             coordinate_gen()        #generates current target coordinate
             display_to_screen()     #shows it on the screen
@@ -39,8 +42,11 @@ def program_run():
             joystick_control()      #set current target screen coordinates
             feedforward_control()   #convert target coordinates to servo positions
             servo_control()         #move servos to positions
-            display_to_screen()     #display target coordinates on screen for comparison
+            display_to_screen()     #display target coordinates on screen for comparison"""
     return
+
+def servo_thread():
+    while True:
 
 
 thread1 = threading.Thread(target=user_interface, args=())
@@ -51,7 +57,4 @@ thread2.start()
 
 thread1.join() #wait until both threads are complete
 thread2.join()
-
-
-
 
