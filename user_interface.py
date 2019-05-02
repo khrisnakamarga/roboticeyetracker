@@ -1,14 +1,12 @@
 
 
-
 #flags
-MODEFLAG = True
-CONTROLFLAG = True
-ENTERFLAG = True
-EYEFLAG = True
+MODEFLAG = False
+CONTROLFLAG = False
+ENTERFLAG = False
+EYEFLAG = False
 
 
-def user_interface():
-
+def run_interface():
 
     return

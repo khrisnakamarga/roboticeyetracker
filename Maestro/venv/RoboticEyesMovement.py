@@ -7,6 +7,7 @@ import os
 import threading
 
 
+
 '''
 Author: Khrisna Kamarga
 Project: Microsoft Robotic Eyes Servo Control Script
@@ -52,7 +53,6 @@ uicount = 1  # counter that updates the console UI
 # right pillar 5810 4030
 # left pillar 5920 4140
 # vertical eye: 2600 - 3120
-
 
 # second version of the joystick controller
 # uses the qwe, asd to control the neck and head gaze movement
@@ -233,11 +233,14 @@ def update_ui():
 #   ry = right eye's vertical position
 #   lx = left eye's horizontal position
 #   ly = left eye's vertical position
+
 def eye_move(rx, ry, lx, ly):
     servo.setTarget(lHorEye, lx)
     servo.setTarget(lVertEye, ly)
     servo.setTarget(rHorEye, rx)
     servo.setTarget(rVertEye, ry)
+
+
 
 
 # post: first prototype of the joystick controller

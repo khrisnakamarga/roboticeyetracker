@@ -48,4 +48,4 @@ def display_to_screen():
     win.getMouse()
     win.close()
 
-display_to_screen()
+#display_to_screen()
