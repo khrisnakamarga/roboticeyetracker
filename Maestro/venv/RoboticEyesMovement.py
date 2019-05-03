@@ -35,6 +35,7 @@ Ideas
 
 # GLOBAL VARIABLES
 # Pololu Channels
+# NOT ANATOMICAL LEFT RIGHT
 lHorEye = 0  # Left Eye Horizontal Motion
 rPillar = 1  # Right Neck Pillar
 lPillar = 2  # Left Neck Pillar
@@ -676,15 +677,15 @@ if __name__ == "__main__":
     # initialize()
     # Shapes.circle(1, 1, 3)
     # stare_to_point(6, 6)
-    # keyboard_control_front()
+    keyboard_control_front()
     # servos_off()
-    initialize()
-    set_param(0, 0)
-    servos_off()
-    rotate_neck(6000)
-    time.sleep(1)
-    grid()
+    # initialize()
+    # set_param(0, 0)
+    # servos_off()
+    # rotate_neck(6000)
+    # time.sleep(1)
     # grid()
+    # # grid()
     # eyemove_interp_grid(4.5, 2.5)
     # Shapes.rectangle(2, 2, 1, 1)
     # Shapes.circle(3, 2, 1, 100)
