@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bb1d47a5-8d62-441b-af8e-5439ddffdb2e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/RoboticEyesMovement.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/RoboticEyesMovement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ServoControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../ServoControl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../save_servo_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/../save_servo_state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../servo_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/../servo_control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_run.py" beforeDir="false" afterPath="$PROJECT_DIR$/../test_run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/../user_interface.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/RoboticEyesMovement.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="599" lean-forward="true" selection-start-line="599" selection-end-line="599" />
+            <state relative-caret-position="323">
+              <caret line="37" column="27" selection-start-line="37" selection-start-column="27" selection-end-line="37" selection-end-column="27" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
               </folding>
@@ -59,8 +51,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/facebook.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="22" column="39" lean-forward="true" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
+            <state relative-caret-position="185">
+              <caret line="61" column="59" selection-start-line="61" selection-start-column="59" selection-end-line="61" selection-end-column="59" />
               <folding>
                 <element signature="e#783#808#0" expanded="true" />
               </folding>
@@ -149,6 +141,9 @@
       <find>rotate</find>
       <find>update</find>
       <find>run</find>
+      <find>initiali</find>
+      <find>numpy</find>
+      <find>COM</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -163,20 +158,20 @@
         <option value="$PROJECT_DIR$/venv/UI_Khrisna.py" />
         <option value="$PROJECT_DIR$/venv/maestro.py" />
         <option value="$USER_HOME$/PycharmProjects/Maestro/venv/facebook.py" />
-        <option value="$PROJECT_DIR$/venv/facebook.py" />
         <option value="$PROJECT_DIR$/../display_to_screen.py" />
         <option value="$PROJECT_DIR$/../../LaserTracker/python-laser-tracker/laser_tracker/laser_tracker.py" />
-        <option value="$PROJECT_DIR$/venv/RoboticEyesMovement.py" />
         <option value="$PROJECT_DIR$/../ServoControl.py" />
         <option value="$PROJECT_DIR$/venv/maestro.py" />
         <option value="$PROJECT_DIR$/../servo_control.py" />
         <option value="$PROJECT_DIR$/../test_run.py" />
         <option value="$PROJECT_DIR$/../user_interface.py" />
         <option value="$PROJECT_DIR$/../save_servo_state.py" />
+        <option value="$PROJECT_DIR$/venv/facebook.py" />
+        <option value="$PROJECT_DIR$/venv/RoboticEyesMovement.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="x" value="1920" />
     <option name="width" value="1920" />
     <option name="height" value="2080" />
@@ -227,7 +222,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.RoboticEyesMovement">
+  <component name="RunManager" selected="Python.facebook (1)">
     <configuration name="RoboticEyesMovement" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Maestro" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -335,10 +330,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.facebook (1)" />
         <item itemvalue="Python.RoboticEyesMovement" />
         <item itemvalue="Python.display_to_screen" />
         <item itemvalue="Python.laser_tracker" />
-        <item itemvalue="Python.facebook (1)" />
         <item itemvalue="Python.facebook" />
       </list>
     </recent_temporary>
@@ -366,21 +361,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1933" height="1053" extended-state="6" />
+    <frame x="960" y="0" width="960" height="1040" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15498155" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3181818" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.34236187" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.34669557" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39869988" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32967034" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32967034" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32502708" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32417583" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.32827735" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -393,12 +388,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/venv/RoboticEyesMovement.py</url>
-          <line>433</line>
+          <line>439</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/venv/RoboticEyesMovement.py</url>
-          <line>574</line>
+          <line>575</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -437,34 +432,10 @@
     <entry file="file://$PROJECT_DIR$/venv/Please make sure you have the correct access rights">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/UI_Khrisna.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="49" selection-start-line="49" selection-end-line="49" />
-          <folding>
-            <element signature="e#456#479#0" expanded="true" />
-            <element signature="e#729#1590#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/PycharmProjects/Maestro/venv/maestro.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1360">
           <caret line="81" column="38" lean-forward="true" selection-start-line="81" selection-start-column="38" selection-end-line="81" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/maestro.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-223">
-          <caret line="130" selection-start-line="130" selection-end-line="130" />
-          <folding>
-            <element signature="e#1884#4907#0" />
-            <element signature="e#4954#8121#0" />
-            <element signature="e#8448#8577#0" />
-            <element signature="e#8915#9056#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -501,16 +472,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/facebook.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="22" column="39" lean-forward="true" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
-          <folding>
-            <element signature="e#783#808#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/PycharmProjects/Maestro/venv/facebook.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -541,23 +502,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/RoboticEyesMovement.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="599" lean-forward="true" selection-start-line="599" selection-end-line="599" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#1902#4925#0" />
-            <element signature="e#4972#8139#0" />
-            <element signature="e#8215#8431#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../save_servo_state.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="187">
+          <caret line="34" column="12" selection-start-line="34" selection-start-column="12" selection-end-line="34" selection-end-column="12" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
@@ -587,10 +535,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/maestro.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26">
-          <caret line="110" column="9" selection-start-line="110" selection-start-column="9" selection-end-line="110" selection-end-column="9" />
+        <state relative-caret-position="-223">
+          <caret line="130" selection-start-line="130" selection-end-line="130" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PycharmProjects/Maestro/venv/Lib/site-packages/scipy-1.2.1-py3.6-win-amd64.egg/scipy/interpolate/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/facebook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="61" column="59" selection-start-line="61" selection-start-column="59" selection-end-line="61" selection-end-column="59" />
+          <folding>
+            <element signature="e#783#808#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/RoboticEyesMovement.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="37" column="27" selection-start-line="37" selection-start-column="27" selection-end-line="37" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
           </folding>
         </state>
       </provider>

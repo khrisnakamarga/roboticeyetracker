@@ -1,7 +1,8 @@
 import maestro  # maestro library
 import time  # for sleeping
-import numpy
+import numpy as np
 import scipy.io
+from scipy import interpolate
 import keyboard
 import os
 import threading
@@ -34,6 +35,7 @@ Ideas
 
 # GLOBAL VARIABLES
 # Pololu Channels
+# NOT ANATOMICAL LEFT RIGHT
 lHorEye = 0  # Left Eye Horizontal Motion
 rPillar = 1  # Right Neck Pillar
 lPillar = 2  # Left Neck Pillar
@@ -72,32 +74,33 @@ def keyboard_control_front():
 
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
+            resolution = 5
             if keyboard.is_pressed('q'):  # if key 'q' is pressed
                 if rPillarInitCoord > 4030:
-                    rPillarInitCoord -= 10
+                    rPillarInitCoord -= resolution
                 if lPillarInitCoord < 5920:
-                    lPillarInitCoord += 10
+                    lPillarInitCoord += resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('e'):
                 if rPillarInitCoord < 5810:
-                    rPillarInitCoord += 10
+                    rPillarInitCoord += resolution
                 if lPillarInitCoord > 4140:
-                    lPillarInitCoord -= 10
+                    lPillarInitCoord -= resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('w'):
                 if rPillarInitCoord < 5810:
-                    rPillarInitCoord += 10
+                    rPillarInitCoord += resolution
                 if lPillarInitCoord < 5920:
-                    lPillarInitCoord += 10
+                    lPillarInitCoord += resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('s'):
                 if rPillarInitCoord > 4030:
-                    rPillarInitCoord -= 10
+                    rPillarInitCoord -= resolution
                 if lPillarInitCoord > 4140:
-                    lPillarInitCoord -= 10
+                    lPillarInitCoord -= resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('a'):
@@ -109,18 +112,18 @@ def keyboard_control_front():
                     neckInitCoord += 100
                 rotate_neck(neckInitCoord)
             elif keyboard.is_pressed('o'):
-                eyeHorInitCoord -= 10
+                eyeHorInitCoord -= resolution
                 eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('p'):
-                eyeHorInitCoord += 10
+                eyeHorInitCoord += resolution
                 eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('t'):
                 # if eyeVertInitCoord > 2600:
-                eyeVertInitCoord -= 10
+                eyeVertInitCoord -= resolution
                 eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('g'):
                 # if eyeVertInitCoord < 3120:
-                eyeVertInitCoord += 10
+                eyeVertInitCoord += resolution
                 eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
                 servos_off()
@@ -410,8 +413,8 @@ def test():
 # too close to the edge
 # eyeHorInitCoord = 2500
 # eyeVertInitCoord = 2890  # eyes in the middle vertically
-eyeHorInitCoord = 2700
-eyeVertInitCoord = 2800
+eyeHorInitCoord = 3100
+eyeVertInitCoord = 2630
 
 
 # converts x screen coordinate to servo coordinate
@@ -469,24 +472,19 @@ class Shapes(object):
     @staticmethod
     def rectangle(x, y, l1, l2):
         sleepytime = 1
-        eye_hor(x_map(x))
-        eye_vert(y_map(y))
+        eyemove_interp_grid(x, y)
         time.sleep(sleepytime)
 
-        eye_hor(x_map(x + l1))
-        eye_vert(y_map(y))
+        eyemove_interp_grid(x + l1, y)
         time.sleep(sleepytime)
 
-        eye_hor(x_map(x + l1))
-        eye_vert(y_map(y + l2))
+        eyemove_interp_grid(x + l1, y + l2)
         time.sleep(sleepytime)
 
-        eye_hor(x_map(x))
-        eye_vert(y_map(y + l2))
+        eyemove_interp_grid(x, y + l2)
         time.sleep(sleepytime)
 
-        eye_hor(x_map(x))
-        eye_vert(y_map(y))
+        eyemove_interp_grid(x, y)
         time.sleep(sleepytime)
 
     @staticmethod
@@ -496,12 +494,12 @@ class Shapes(object):
 
     @staticmethod
     # draw a triangle
-    def circle(x, y, radius):
-        theta = numpy.linspace(0, 2*numpy.pi, 0.01)
+    def circle(x, y, radius, rotations):
+        theta = np.arange(0, rotations*2*np.pi, 0.1)
+        print(theta)
         for i in theta:
-            eye_hor(x_map(x + radius*numpy.cos(i)))
-            eye_vert(y_map(y + radius*numpy.sin(i)))
-            time.sleep(0.1)
+            eyemove_interp_grid(x + radius*np.cos(i), y + radius*np.sin(i))
+            time.sleep(0.001)
 
 
 
@@ -584,8 +582,8 @@ def trajectory():
 
 def stare_to_point(x, y):
     sleepytime = 1
-    eye_hor(x_map(x))
-    eye_vert(y_map(y))
+    eye_hor(x)
+    eye_vert(y)
     time.sleep(sleepytime)
 
 
@@ -594,6 +592,80 @@ def move_wait(channel, final):
     while True:
         if servo.getPosition(channel) == final:
             break
+
+
+def grid():
+    x = np.arange(1, 11, 1)
+    y = np.arange(1, 5, 1)
+    # debugging
+    # print(x)
+    # print(y)
+    xx, yy = np.meshgrid(x, y)
+    X_screen = [[3840, 3795, 3740, 3685, 3625, 3555, 3490, 3430, 3370, 3315],
+                [3865, 3800, 3740, 3685, 3625, 3540, 3480, 3415, 3360, 3300],
+                [3855, 3795, 3745, 3690, 3610, 3550, 3485, 3425, 3365, 3315],
+                [3855, 3795, 3745, 3670, 3610, 3545, 3480, 3420, 3365, 3305]]
+    Y_screen = [[2800, 2800, 2800, 2805, 2805, 2805, 2800, 2800, 2805, 2800],
+                [2860, 2865, 2870, 2870, 2870, 2870, 2865, 2865, 2865, 2865],
+                [2935, 2935, 2935, 2935, 2930, 2930, 2930, 2930, 2930, 2930],
+                [2995, 3005, 3005, 3000, 3000, 3000, 3000, 3000, 3010, 3010]]
+    sleepytime = 0.3
+
+    # sweeps right, then repeats downwards
+    for i in range(4):
+        for j in range(10):
+            eye_hor(X_screen[i][j])
+            eye_vert(Y_screen[i][j])
+            time.sleep(sleepytime)
+
+    # sweeps left, then repeats upwards
+    for i in range(4):
+        for j in range(10):
+            eye_hor(X_screen[3-i][9-j])
+            eye_vert(Y_screen[3-i][9-j])
+            time.sleep(sleepytime)
+
+    # sweeps down, then repeats right
+    for j in range(10):
+        for i in range(4):
+            eye_hor(X_screen[i][j])
+            eye_vert(Y_screen[i][j])
+            time.sleep(sleepytime)
+
+    # sweeps up, then repeats left
+    for j in range(10):
+        for i in range(4):
+            eye_hor(X_screen[3-i][9-j])
+            eye_vert(Y_screen[3-i][9-j])
+            time.sleep(sleepytime)
+
+
+def eyemove_interp_grid(x_grid, y_grid):
+    x = np.arange(1, 11, 1)
+    y = np.arange(1, 5, 1)
+    y_grid = 5 - y_grid
+    # debugging
+    # print(x)
+    # print(y)
+    X_screen = [[3840, 3795, 3740, 3685, 3625, 3555, 3490, 3430, 3370, 3315],
+                [3865, 3800, 3740, 3685, 3625, 3540, 3480, 3415, 3360, 3300],
+                [3855, 3795, 3745, 3690, 3610, 3550, 3485, 3425, 3365, 3315],
+                [3855, 3795, 3745, 3670, 3610, 3545, 3480, 3420, 3365, 3305]]
+    Y_screen = [[2800, 2800, 2800, 2805, 2805, 2805, 2800, 2800, 2805, 2800],
+                [2860, 2865, 2870, 2870, 2870, 2870, 2865, 2865, 2865, 2865],
+                [2935, 2935, 2935, 2935, 2930, 2930, 2930, 2930, 2930, 2930],
+                [2995, 3005, 3005, 3000, 3000, 3000, 3000, 3000, 3010, 3010]]
+    f_X_screen = interpolate.interp2d(x, y, X_screen, kind='linear')
+    f_Y_screen = interpolate.interp2d(x, y, Y_screen, kind='linear')
+
+
+    # print(int(f_X_screen(x_grid, y_grid)))
+    # print(int(f_Y_screen(x_grid, y_grid)))
+    eye_hor(int(f_X_screen(x_grid, y_grid)))
+    eye_vert(int(f_Y_screen(x_grid, y_grid)))
+    sleepytime = 0.3
+    # time.sleep(sleepytime)
+
 
 
 def main():
@@ -606,6 +678,17 @@ if __name__ == "__main__":
     # Shapes.circle(1, 1, 3)
     # stare_to_point(6, 6)
     keyboard_control_front()
+    # servos_off()
+    # initialize()
+    # set_param(0, 0)
+    # servos_off()
+    # rotate_neck(6000)
+    # time.sleep(1)
+    # grid()
+    # # grid()
+    # eyemove_interp_grid(4.5, 2.5)
+    # Shapes.rectangle(2, 2, 1, 1)
+    # Shapes.circle(3, 2, 1, 100)
     # servos_off()
 
 # new limit: 2870
