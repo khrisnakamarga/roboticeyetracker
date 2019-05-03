@@ -59,7 +59,7 @@ if __name__ == "__main__":
                     RoboticEyesMovement.main()
                     sent = client.send(Message(text='Stop'), friend.uid, thread_type=ThreadType.USER)
                 elif command == "Stare":
-                    RoboticEyesMovement.stare_to_point(int(x), int(y))
+                    RoboticEyesMovement.eyemove_interp_grid(int(x), int(y))
                     sent = client.send(Message(text='Done!'), friend.uid, thread_type=ThreadType.USER)
                 elif command == "Initialize":
                     RoboticEyesMovement.initialize()
