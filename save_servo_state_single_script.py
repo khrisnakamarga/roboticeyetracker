@@ -12,11 +12,8 @@ This module:
 - at the end saves to a final array that is in the correct format, to a csv.
 '''
 
-eyechannelx_l = 1   # channel number of eye servos
-eyechannely_l = 2
-
-row = 10     # change array size here
-col = 20
+row = 5     # to do: need to get this set from the UI
+col = 5
 last = row*col
 
 array_position_l = 1    #
@@ -26,12 +23,14 @@ left_array = []   # array to store data 4 variables in each part, first 2 is ser
 left_array_final_x = [[[] for i in range(col)] for j in range(row)]   # final array to be saved to csv, and to also be used for interpolation
 left_array_final_y = [[[] for i in range(col)] for j in range(row)]
 
-def save_state(index_x,index_y):    # every time this is called it adds to the list
+def save_state(servo_x,servo_y):    # every time this is called it adds to the list
     global array_position_l         # need these to be persistent
     global left_array
 
-    left_array.append([np.random.random()*1000, np.random.random()*1000+2000, index_x, index_y])
+    left_array.append([servo_x, servo_y, coordinate_gen.get_X(), coordinate_gen.get_Y()])
     array_position_l = array_position_l + 1
+    print("now doing:")
+    print(array_position_l)
 
     if array_position_l == last+1:
         save_to_final()
@@ -41,6 +40,8 @@ def save_state(index_x,index_y):    # every time this is called it adds to the l
 def save_to_final():
     global left_array_final_x
     global left_array_final_y
+
+    print(left_array)
 
     for z in range(last):
         left_array_final_x[left_array[z][3-1]-1][left_array[z][4-1]-1] = left_array[z][1-1]
@@ -70,6 +71,13 @@ def reset_everything():
 
     return
 
+
+def get_row():
+    return row
+
+
+def get_col():
+    return col
 
 if __name__ == "__main__":   #testing
     for i in range(row):

@@ -5,6 +5,8 @@ import scipy.io
 from scipy import interpolate
 import keyboard
 import os
+import save_servo_state_single_script as save_servo
+import coordinate_gen
 import threading
 
 
@@ -74,7 +76,7 @@ def keyboard_control_front():
 
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
-            resolution = 5
+            resolution = 4
             if keyboard.is_pressed('q'):  # if key 'q' is pressed
                 if rPillarInitCoord > 4030:
                     rPillarInitCoord -= resolution
@@ -147,6 +149,8 @@ def keyboard_control_back():
     accelLim = 0
     velLim = 0
     set_param(accelLim, velLim)
+    resolution = 2
+
     global neckInitCoord
     global rPillarInitCoord
     global lPillarInitCoord
@@ -157,30 +161,30 @@ def keyboard_control_back():
         try:  # used try so that if user pressed other than the given key error will not be shown
             if keyboard.is_pressed('e'):  # if key 'q' is pressed
                 if rPillarInitCoord > 4030:
-                    rPillarInitCoord -= 10
+                    rPillarInitCoord -= resolution
                 if lPillarInitCoord < 5920:
-                    lPillarInitCoord += 10
+                    lPillarInitCoord += resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('q'):
                 if rPillarInitCoord < 5810:
-                    rPillarInitCoord += 10
+                    rPillarInitCoord += resolution
                 if lPillarInitCoord > 4140:
-                    lPillarInitCoord -= 10
+                    lPillarInitCoord -= resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('w'):
                 if rPillarInitCoord < 5810:
-                    rPillarInitCoord += 10
+                    rPillarInitCoord += resolution
                 if lPillarInitCoord < 5920:
-                    lPillarInitCoord += 10
+                    lPillarInitCoord += resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('s'):
                 if rPillarInitCoord > 4030:
-                    rPillarInitCoord -= 10
+                    rPillarInitCoord -= resolution
                 if lPillarInitCoord > 4140:
-                    lPillarInitCoord -= 10
+                    lPillarInitCoord -= resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
             elif keyboard.is_pressed('d'):
@@ -192,21 +196,23 @@ def keyboard_control_back():
                     neckInitCoord += 100
                 rotate_neck(neckInitCoord)
             elif keyboard.is_pressed('p'):
-                eyeHorInitCoord -= 10
-                eyeHor(eyeHorInitCoord)
+                eyeHorInitCoord -= resolution
+                eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('o'):
-                eyeHorInitCoord += 10
-                eyeHor(eyeHorInitCoord)
+                eyeHorInitCoord += resolution
+                eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('t'):
-                if eyeVertInitCoord > 2600:
-                    eyeVertInitCoord -= 10
-                eyeVert(eyeVertInitCoord)
+                if eyeVertInitCoord > 1600:
+                    eyeVertInitCoord -= resolution
+                eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('g'):
                 if eyeVertInitCoord < 3120:
-                    eyeVertInitCoord += 10
-                eyeVert(eyeVertInitCoord)
+                    eyeVertInitCoord += resolution
+                eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
-                servos_off()
+                save_servo.save_state(eyeHorInitCoord,eyeVertInitCoord)
+                coordinate_gen.increment_index()
+                time.sleep(0.25)
 
             # os.system('cls')
             # print("Neck Rotation = " + str(neckInitCoord))
@@ -216,14 +222,14 @@ def keyboard_control_back():
             uicount += 1
             if uicount == 5:
                 uicount = 0
-                update_ui()
-            time.sleep(0.001)
-
-        if keyboard.is_pressed('z'):
+                #update_ui()
+            time.sleep(0.02)
 
         except KeyboardInterrupt:
             servos_off()  # if user pressed a key other than the given key the loop will break
 
+        if keyboard.is_pressed('m'):
+            break
 
 # post: prints the servo coordinates to the console
 def update_ui():
@@ -598,48 +604,47 @@ def move_wait(channel, final):
 
 
 def grid():
-    x = np.arange(1, 11, 1)
-    y = np.arange(1, 5, 1)
+
+    col = coordinate_gen.col
+    row = coordinate_gen.row
+    x = np.arange(1, col+1, 1)
+    y = np.arange(1, row+1, 1)
     # debugging
     # print(x)
     # print(y)
     xx, yy = np.meshgrid(x, y)
-    X_screen = [[3840, 3795, 3740, 3685, 3625, 3555, 3490, 3430, 3370, 3315],
-                [3865, 3800, 3740, 3685, 3625, 3540, 3480, 3415, 3360, 3300],
-                [3855, 3795, 3745, 3690, 3610, 3550, 3485, 3425, 3365, 3315],
-                [3855, 3795, 3745, 3670, 3610, 3545, 3480, 3420, 3365, 3305]]
-    Y_screen = [[2800, 2800, 2800, 2805, 2805, 2805, 2800, 2800, 2805, 2800],
-                [2860, 2865, 2870, 2870, 2870, 2870, 2865, 2865, 2865, 2865],
-                [2935, 2935, 2935, 2935, 2930, 2930, 2930, 2930, 2930, 2930],
-                [2995, 3005, 3005, 3000, 3000, 3000, 3000, 3000, 3010, 3010]]
+    X_screen = save_servo.left_array_final_x
+
+    Y_screen = save_servo.left_array_final_y
+
     sleepytime = 0.3
 
     # sweeps right, then repeats downwards
-    for i in range(4):
-        for j in range(10):
+    for i in range(row):
+        for j in range(col):
             eye_hor(X_screen[i][j])
             eye_vert(Y_screen[i][j])
             time.sleep(sleepytime)
 
     # sweeps left, then repeats upwards
-    for i in range(4):
-        for j in range(10):
-            eye_hor(X_screen[3-i][9-j])
-            eye_vert(Y_screen[3-i][9-j])
+    for i in range(row):
+        for j in range(col):
+            eye_hor(X_screen[row-1-i][col-1-j])
+            eye_vert(Y_screen[row-1-i][col-1-j])
             time.sleep(sleepytime)
 
     # sweeps down, then repeats right
-    for j in range(10):
-        for i in range(4):
+    for j in range(col):
+        for i in range(row):
             eye_hor(X_screen[i][j])
             eye_vert(Y_screen[i][j])
             time.sleep(sleepytime)
 
     # sweeps up, then repeats left
-    for j in range(10):
-        for i in range(4):
-            eye_hor(X_screen[3-i][9-j])
-            eye_vert(Y_screen[3-i][9-j])
+    for j in range(col):
+        for i in range(row):
+            eye_hor(X_screen[row-1-i][col-1-j])
+            eye_vert(Y_screen[row-1-i][col-1-j])
             time.sleep(sleepytime)
 
 
@@ -658,8 +663,8 @@ def eyemove_interp_grid(x_grid, y_grid):
                 [2860, 2865, 2870, 2870, 2870, 2870, 2865, 2865, 2865, 2865],
                 [2935, 2935, 2935, 2935, 2930, 2930, 2930, 2930, 2930, 2930],
                 [2995, 3005, 3005, 3000, 3000, 3000, 3000, 3000, 3010, 3010]]
-    f_X_screen = interpolate.interp2d(x, y, X_screen, kind='linear')
-    f_Y_screen = interpolate.interp2d(x, y, Y_screen, kind='linear')
+    f_X_screen = interpolate.interp2d(x, y, X_screen, kind='cubic')
+    f_Y_screen = interpolate.interp2d(x, y, Y_screen, kind='cubic')
 
 
     # print(int(f_X_screen(x_grid, y_grid)))
@@ -672,15 +677,19 @@ def eyemove_interp_grid(x_grid, y_grid):
 
 
 def main():
-    # initialize()
-    test()
-    servos_off()
+    initialize()
+    #test()
+    #servos_off()
 
 if __name__ == "__main__":
     #initialize()
     # Shapes.circle(1, 1, 3)
     # stare_to_point(6, 6)
-    keyboard_control_front()
+    keyboard_control_back()
+    while True:
+        grid()
+        if keyboard.is_pressed('m'):
+            break
     # servos_off()
     # initialize()
     set_param(0, 0)
