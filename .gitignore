@@ -3,3 +3,9 @@
 *.pub
 *.xml
 *.iml
+*.cfg
+
+#ignore config folders
+.idea/
+__pycache__/
+
