@@ -1,0 +1,5 @@
+# ignore config files and personal settings
+*.json
+*.pub
+*.xml
+*.iml
