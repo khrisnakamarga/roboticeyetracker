@@ -10,9 +10,13 @@ class MockCalibration(QWidget):
         # self.screenx = 1920
         # self.screeny = 1080
 
-        # khrisna's screen
-        self.screenx = 3840
-        self.screeny = 2160
+        # # khrisna's screen
+        # self.screenx = 3840
+        # self.screeny = 2160
+
+        # kai's screen
+        self.screenx = 2560
+        self.screeny = 1440
 
         super().__init__()
         self.initUI()
@@ -29,15 +33,23 @@ class MockCalibration(QWidget):
         painter.setPen(QPen(Qt.blue, 8, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.blue, Qt.SolidPattern))
 
-        painter.drawEllipse(self.screenx/8, self.screeny/6, 50, 50)
-        painter.drawEllipse(self.screenx *1/2, self.screeny/6, 50, 50)
-        painter.drawEllipse(self.screenx *7/8, self.screeny/6, 50, 50)
+
+        # painter.drawEllipse(self.screenx/8, self.screeny/6, 50, 50)
+        # painter.drawEllipse(self.screenx *1/2, self.screeny/6, 50, 50)
+        # painter.drawEllipse(self.screenx *7/8, self.screeny/6, 50, 50)
+        #
+        #
+        # painter.drawEllipse(self.screenx/8, self.screeny *5/6, 50, 50)
+        # painter.drawEllipse(self.screenx *1/2, self.screeny *5/6, 50, 50)
+        # painter.drawEllipse(self.screenx *7/8, self.screeny *5/6, 50, 50)
 
 
-        painter.drawEllipse(self.screenx/8, self.screeny *5/6, 50, 50)
-        painter.drawEllipse(self.screenx *1/2, self.screeny *5/6, 50, 50)
-        painter.drawEllipse(self.screenx *7/8, self.screeny *5/6, 50, 50)
+        #before: 5 rows, 16 columns
 
+        for row in range(4):
+            for col in range(10):
+                print('\ncol:', self.screenx * (col + 1) / 11, 'row', self.screeny * (row + 1) / 5)
+                painter.drawEllipse(self.screenx * (col + 1) / 11, self.screeny * (row + 1) / 5, 50, 50)
 
         painter.end()
 
