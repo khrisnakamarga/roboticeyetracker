@@ -207,6 +207,8 @@ def keyboard_control_back():
                 eyeVert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
                 servos_off()
+            elif keyboard.is_pressed('z'):
+                servos_off()
 
             # os.system('cls')
             # print("Neck Rotation = " + str(neckInitCoord))
@@ -218,8 +220,6 @@ def keyboard_control_back():
                 uicount = 0
                 update_ui()
             time.sleep(0.001)
-
-        if keyboard.is_pressed('z'):
 
         except KeyboardInterrupt:
             servos_off()  # if user pressed a key other than the given key the loop will break
@@ -313,12 +313,11 @@ def step_response():
 # post: initializes the Pololu Controller
 def initialize():
     global servo
-    servo = maestro.Controller('COM5')  #COM7 on Khrisna's
+    servo = maestro.Controller('COM7')  #COM7 on Khrisna's
     servo.setTarget(1, 4900)
     servo.setTarget(2, 5100)
     time.sleep(1)
     # servo.setTarget(11, 2000)
-
 
 # pre: pass in values between 4000 - 6000
 # post: nods the head to the final location
