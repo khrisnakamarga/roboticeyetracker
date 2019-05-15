@@ -210,8 +210,11 @@ def keyboard_control_back():
                     eyeVertInitCoord += resolution
                 eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
+
+
                 save_servo.save_state(eyeHorInitCoord,eyeVertInitCoord)
                 coordinate_gen.increment_index()
+
                 time.sleep(0.25)
 
             # os.system('cls')
