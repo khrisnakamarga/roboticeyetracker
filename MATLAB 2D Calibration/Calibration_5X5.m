@@ -1,49 +1,39 @@
-clear all; close all; clc;
+% Plotting the Calibration Map
+% input: csv file, containing the calibration map
 
-x = [2721; 2780; 2830; 2870; 2920];
-
-grid on
-plot(x,'--')
-hold on
-plot(x,'o')
-xlabel("y screen coordinate");
-ylabel("vertical eye servo coordinate");
-grid on
-
-%%
 clear all; close all; clc;
 
 screen_coordinate = zeros(5, 16, 2);
 
-for i = linspace(1,5,5)
-    for j = linspace(1,16,16)
-        for k = [1 2]
-            screen_coordinate(i,j,k) = input("insert " + k + " servo coordinate = ");
-        end
-        display("next point")
-    end
-    clc;
-    display("first row done!")
-end
-
 %%
 close all; clc;
-load('calibration map.mat')
+X_map = csvread('testx.csv');
+Y_map = csvread('testy.csv');
+
+[row column] = size(X_map);
+screen_coordinate = zeros(row, column, 2);
+
+screen_coordinate(:,:,1) = X_map;
+screen_coordinate(:,:,2) = Y_map;
+
+
+
+%%
 
 X = [];
-for i = 1:16
-    X = [X linspace(1,5,5)];
+for i = 1:column
+    X = [X linspace(1,row,row)];
 end
 
 Y = [];
-for i = 1:5
-    Y = [Y linspace(1,16,16)];
+for i = 1:row
+    Y = [Y linspace(1,column,column)];
 end
 
-[x, y] = meshgrid(1:16, 1:5);
+[x, y] = meshgrid(1:column, 1:row);
 
 figure(1)
-plot3(X, Y, reshape(screen_coordinate(:,:,1),16*5, 1))
+plot3(X, Y, reshape(screen_coordinate(:,:,1),row*column, 1))
 figure(2)
 surf(x, y, screen_coordinate(:,:,1))
 title('2D Horizontal Servo Map')
@@ -60,7 +50,7 @@ xlabel('X coordinate of the screen')
 ylabel('Y coordinate of the screen')
 
 figure(4)
-plot3(X, Y, reshape(screen_coordinate(:,:,2),16*5, 1))
+plot3(X, Y, reshape(screen_coordinate(:,:,2),row*column, 1))
 figure(5)
 surf(x, y, screen_coordinate(:,:,2))
 c = colorbar;
