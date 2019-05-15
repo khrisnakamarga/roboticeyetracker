@@ -74,7 +74,7 @@ def keyboard_control_front():
 
     while True:  # making a loop
         try:  # used try so that if user pressed other than the given key error will not be shown
-            resolution = 5
+            resolution = 10
             if keyboard.is_pressed('q'):  # if key 'q' is pressed
                 if rPillarInitCoord > 4030:
                     rPillarInitCoord -= resolution
@@ -82,28 +82,28 @@ def keyboard_control_front():
                     lPillarInitCoord += resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
-            elif keyboard.is_pressed('e'):
+            if keyboard.is_pressed('e'):
                 if rPillarInitCoord < 5810:
                     rPillarInitCoord += resolution
                 if lPillarInitCoord > 4140:
                     lPillarInitCoord -= resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
-            elif keyboard.is_pressed('w'):
+            if keyboard.is_pressed('w'):
                 if rPillarInitCoord < 5810:
                     rPillarInitCoord += resolution
                 if lPillarInitCoord < 5920:
                     lPillarInitCoord += resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
-            elif keyboard.is_pressed('s'):
+            if keyboard.is_pressed('s'):
                 if rPillarInitCoord > 4030:
                     rPillarInitCoord -= resolution
                 if lPillarInitCoord > 4140:
                     lPillarInitCoord -= resolution
                 servo.setTarget(1, rPillarInitCoord)
                 servo.setTarget(2, lPillarInitCoord)
-            elif keyboard.is_pressed('a'):
+            if keyboard.is_pressed('a'):
                 if neckInitCoord > 2800:
                     neckInitCoord -= 100
                 rotate_neck(neckInitCoord)
@@ -111,21 +111,21 @@ def keyboard_control_front():
                 if neckInitCoord < 9600:
                     neckInitCoord += 100
                 rotate_neck(neckInitCoord)
-            elif keyboard.is_pressed('o'):
+            if keyboard.is_pressed('o'):
                 eyeHorInitCoord -= resolution
                 eye_hor(eyeHorInitCoord)
             elif keyboard.is_pressed('p'):
                 eyeHorInitCoord += resolution
                 eye_hor(eyeHorInitCoord)
-            elif keyboard.is_pressed('t'):
+            if keyboard.is_pressed('t'):
                 # if eyeVertInitCoord > 2600:
                 eyeVertInitCoord -= resolution
                 eye_vert(eyeVertInitCoord)
-            elif keyboard.is_pressed('g'):
+            if keyboard.is_pressed('g'):
                 # if eyeVertInitCoord < 3120:
                 eyeVertInitCoord += resolution
                 eye_vert(eyeVertInitCoord)
-            elif keyboard.is_pressed('z'):
+            if keyboard.is_pressed('z'):
                 servos_off()
             # else:
             #     servos_off()
@@ -135,7 +135,7 @@ def keyboard_control_front():
             if uicount == 5:
                 uicount = 0
                 update_ui()
-            time.sleep(0.05)
+            time.sleep(0.01)
         except KeyboardInterrupt:
             servos_off()  # if user pressed a key other than the given key the loop will break
             exit()
@@ -602,7 +602,6 @@ def grid():
     # debugging
     # print(x)
     # print(y)
-    xx, yy = np.meshgrid(x, y)
     X_screen = [[3840, 3795, 3740, 3685, 3625, 3555, 3490, 3430, 3370, 3315],
                 [3865, 3800, 3740, 3685, 3625, 3540, 3480, 3415, 3360, 3300],
                 [3855, 3795, 3745, 3690, 3610, 3550, 3485, 3425, 3365, 3315],
@@ -660,7 +659,6 @@ def eyemove_interp_grid(x_grid, y_grid):
     f_X_screen = interpolate.interp2d(x, y, X_screen, kind='linear')
     f_Y_screen = interpolate.interp2d(x, y, Y_screen, kind='linear')
 
-
     # print(int(f_X_screen(x_grid, y_grid)))
     # print(int(f_Y_screen(x_grid, y_grid)))
     eye_hor(int(f_X_screen(x_grid, y_grid)))
@@ -682,7 +680,7 @@ if __name__ == "__main__":
     keyboard_control_front()
     # servos_off()
     # initialize()
-    set_param(0, 0)
+    # set_param(0, 0)
     servos_off()
     # rotate_neck(6000)
     # time.sleep(1)

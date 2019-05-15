@@ -62,7 +62,15 @@ for i in range(0, pygame.joystick.get_count()):
 
 xbox = joysticks[-1]
 
-if __name__ == '__main__':
+# global variables
+# States
+CALIBRATE = True
+CONTROL = False
+# initial values of servo middle point
+x_axis = 3715
+y_axis = 2560
+
+def main():
     initialize()
     white = (255, 255, 255)  # RGB
     red = (255, 0, 0)
@@ -74,8 +82,8 @@ if __name__ == '__main__':
 
     gameExit = False
 
-
     while not gameExit:
+        # pygame display
         clock.tick(60)
 
         for event in pygame.event.get():
@@ -90,16 +98,17 @@ if __name__ == '__main__':
         #         lead_x = lead_x - 10
         #     if event.button == 1:
         #         lead_x = lead_x + 10
-        lead_y = xbox.get_axis(1)*200 + 300
-        lead_x = xbox.get_axis(0)*200 + 300
+        lead_y = xbox.get_axis(1) * 200 + 300
+        lead_x = xbox.get_axis(0) * 200 + 300
         gameDisplay.fill(red)
 
         pygame.draw.rect(gameDisplay, white, [lead_x, lead_y, 20, 20])
 
         pygame.display.update()
 
-        hold = False
-        #buttons
+        # pygame display
+
+        # buttons
         increment = 50
         if event.type == pygame.JOYBUTTONDOWN:
             if event.button == 3:  # y button
@@ -124,6 +133,76 @@ if __name__ == '__main__':
         # changing the variables that is used to command the servo
         x_axis = joystick_for_eye(xbox.get_axis(0))
         y_axis = joystick_for_eye_r(xbox.get_axis(1))
+
+        # actuate in the test rig
+        servo.setTarget(lHorEye, x_axis)
+        servo.setTarget(lVertEye, y_axis)
+        servo.setTarget(neck, neckInitCoord)
+        servo.setTarget(rPillar, rPillarInitCoord)
+        servo.setTarget(lPillar, lPillarInitCoord)
+
+    pygame.quit()
+
+if __name__ == '__main__':
+    initialize()
+    white = (255, 255, 255)  # RGB
+    red = (255, 0, 0)
+
+    gameDisplay = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("CONTROL")
+
+    pygame.display.update()
+
+    gameExit = False
+
+
+    while not gameExit:
+        # pygame display
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameExit = True
+        lead_y = xbox.get_axis(1)*200 + 300
+        lead_x = xbox.get_axis(0)*200 + 300
+        gameDisplay.fill(red)
+
+        pygame.draw.rect(gameDisplay, white, [lead_x, lead_y, 20, 20])
+
+        pygame.display.update()
+
+        # pygame display
+
+
+        #buttons
+        x_increment = xbox.get_axis(0)*30
+        y_increment = xbox.get_axis(1)*30
+        increment = 20
+        if xbox.get_button(3):  # y button
+            rPillarInitCoord += increment
+            lPillarInitCoord += increment
+        if xbox.get_button(0):  # a button
+            rPillarInitCoord -= increment
+            lPillarInitCoord -= increment
+        if xbox.get_button(2):  # x button
+            neckInitCoord -= increment  # move neck cw
+        if xbox.get_button(1):  # b button
+            neckInitCoord += increment  # move neck ccw
+        if xbox.get_button(4):  # lb
+            rPillarInitCoord -= increment
+            lPillarInitCoord += increment
+        if xbox.get_button(5):  # rb
+            rPillarInitCoord += increment
+            lPillarInitCoord -= increment
+        if xbox.get_button(6):
+            print(x_axis)
+            print(y_axis)
+
+        # changing the variables that is used to command the servo
+        if abs(x_increment) > 1:  # cutoff to avoid drifting
+            x_axis += x_increment
+        if abs(y_increment) > 1:  # cutoff to avoid drifting
+            y_axis += y_increment
 
 
         # actuate in the test rig
