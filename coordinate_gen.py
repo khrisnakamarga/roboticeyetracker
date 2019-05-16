@@ -1,4 +1,4 @@
- currentX = 1
+currentX = 1
 currentY = 1
 
 row = 4   #need to get this set from the UI
