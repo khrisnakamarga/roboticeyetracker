@@ -18,8 +18,8 @@ array_position = 1    #not 0
 
 array = []   # array to store data 4 variables in each part, first 2 is servo coordinate hor, vert, last 2 is X,Y coordinate
 
-array_final_x = [[[] for i in range(col)] for j in range(row)]   # final array to be saved to csv, and to also be used for interpolation
-array_final_y = [[[] for i in range(col)] for j in range(row)]
+array_final_x = [[[] for i in range(row)] for j in range(col)]   # final array to be saved to csv, and to also be used for interpolation
+array_final_y = [[[] for i in range(row)] for j in range(col)]
 
 def save_state(servo_x,servo_y):    # every time this is called it adds to the list
     global array_position         # need these to be persistent

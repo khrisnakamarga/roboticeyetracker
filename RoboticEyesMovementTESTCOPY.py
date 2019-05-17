@@ -211,7 +211,6 @@ def keyboard_control_back():
                 eye_vert(eyeVertInitCoord)
             elif keyboard.is_pressed('z'):
 
-
                 save_servo.save_state(eyeHorInitCoord,eyeVertInitCoord)
                 coordinate_gen.increment_index()
 
