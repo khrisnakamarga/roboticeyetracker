@@ -3,6 +3,8 @@ import time  # for sleeping
 import save_servo_state_left as save_left  # saving left eye calibration map
 import save_servo_state_right as save_right  # saving right eye calibration map
 import coordinate_gen as cg  # generating the grid for the calibration map
+import numpy as np
+from scipy import interpolate
 
 # GLOBAL VARIABLES
 # Pololu Channels
@@ -42,6 +44,10 @@ def initialize():
     servo.setTarget(lVertEye, 2560)
     time.sleep(1)
 
+# turns all the servos off
+def servos_off():
+    for ch in range(12):
+        servo.setTarget(ch, 0)
 
 def joystick_for_eye(joystick_x_coordinate):
     return joystick_x_coordinate*(4000 - 3400) + 3715
@@ -73,8 +79,28 @@ CONTROL = False
 x_axis = 3715
 y_axis = 2560
 
+
 def main():
     initialize()
+
+    # GLOBAL VARIABLES
+    # Pololu Channels
+    # NOT ANATOMICAL LEFT RIGHT
+    rPillar = 1  # Right Neck Pillar
+    lPillar = 2  # Left Neck Pillar
+    rHorEye = 0  # Left Eye Horizontal Motion
+    rVertEye = 3  # Left Eye Vertical Motion
+    lHorEye = 6  # Right Eye Horizontal Motion
+    lVertEye = 7  # Right Eye Vertical Motion
+    neck = 11  # Horizontal Neck Motion
+
+    # These variables change as the configuration of the robot changes
+    neckInitCoord = 6000  # faces the front of the test rig
+    rPillarInitCoord = 4900  # zero head elevation for the right pillar
+    lPillarInitCoord = 5100  # zero head elevation for the left pillar
+    eyeHorInitCoord = 3000  # eyes in the middle horizontally
+    eyeVertInitCoord = 3000  # eyes in the middle vertically
+
     white = (255, 255, 255)  # RGB
     red = (255, 0, 0)
 
@@ -112,42 +138,42 @@ def main():
         # pygame display
 
         # buttons
-        increment = 50
-        if event.type == pygame.JOYBUTTONDOWN:
-            if event.button == 3:  # y button
-                rPillarInitCoord += increment
-                lPillarInitCoord += increment
-            if event.button == 0:  # a button
-                rPillarInitCoord -= increment
-                lPillarInitCoord -= increment
-            if event.button == 2:  # x button
-                neckInitCoord -= increment  # move neck cw
-            if event.button == 1:  # b button
-                neckInitCoord += increment  # move neck ccw
-            if event.button == 4:  # lb
-                rPillarInitCoord -= increment
-                lPillarInitCoord += increment
-            if event.button == 5:  # rb
-                rPillarInitCoord += increment
-                lPillarInitCoord -= increment
-            if event.button == 7:
-                hold = True
+        increment = 10
+        # button press
+        if xbox.get_button(3):  # y button
+            rPillarInitCoord += increment
+            lPillarInitCoord += increment
+        if xbox.get_button(0):  # a button
+            rPillarInitCoord -= increment
+            lPillarInitCoord -= increment
+        if xbox.get_button(2):  # x button
+            neckInitCoord -= increment  # move neck cw
+        if xbox.get_button(1):  # b button
+            neckInitCoord += increment  # move neck ccw
 
         # changing the variables that is used to command the servo
-        x_axis = joystick_for_eye(xbox.get_axis(0))
-        y_axis = joystick_for_eye_r(xbox.get_axis(1))
+        x_axis = joystick_for_eye(-xbox.get_axis(0))
+        y_axis = joystick_for_eye_r(-xbox.get_axis(1))
 
         # actuate in the test rig
-        servo.setTarget(lHorEye, x_axis)
-        servo.setTarget(lVertEye, y_axis)
+        servo.setTarget(rHorEye, x_axis)
+        servo.setTarget(rVertEye, y_axis)
         servo.setTarget(neck, neckInitCoord)
         servo.setTarget(rPillar, rPillarInitCoord)
         servo.setTarget(lPillar, lPillarInitCoord)
 
     pygame.quit()
+    servos_off()
+
 
 def joystick_proportional_control_right():
-    initialize()
+    global x_axis
+    global y_axis
+    global neckInitCoord
+    global rPillarInitCoord
+    global lPillarInitCoord
+
+    # initialize()  # separate initialize
     white = (255, 255, 255)  # RGB
     red = (255, 0, 0)
 
@@ -157,7 +183,6 @@ def joystick_proportional_control_right():
     pygame.display.update()
 
     gameExit = False
-
 
     while not gameExit:
         # pygame display
@@ -178,9 +203,16 @@ def joystick_proportional_control_right():
 
 
         #buttons
-        x_increment = xbox.get_axis(0)*30
-        y_increment = xbox.get_axis(1)*30
+        x_increment = -xbox.get_axis(0)*10
+        y_increment = xbox.get_axis(1)*10
         increment = 20
+
+        # changing the variables that is used to command the servo
+        if abs(x_increment) > 1:  # cutoff to avoid drifting
+            x_axis += x_increment
+        if abs(y_increment) > 1:  # cutoff to avoid drifting
+            y_axis += y_increment
+        # button press
         if xbox.get_button(3):  # y button
             rPillarInitCoord += increment
             lPillarInitCoord += increment
@@ -191,34 +223,23 @@ def joystick_proportional_control_right():
             neckInitCoord -= increment  # move neck cw
         if xbox.get_button(1):  # b button
             neckInitCoord += increment  # move neck ccw
-        if xbox.get_button(4):  # lb
-            rPillarInitCoord -= increment
-            lPillarInitCoord += increment
-        if xbox.get_button(5):  # rb
-            rPillarInitCoord += increment
-            lPillarInitCoord -= increment
         if xbox.get_button(6):  # showing the value of servo command
             print(x_axis)
             print(y_axis)
             time.sleep(0.5)  # debounce
-        if xbox.get_button(11):  # rt
-            save_right.save_state(eyeHorInitCoord, eyeVertInitCoord)
+        if xbox.get_button(5):  # rb
+            save_right.save_state(x_axis, y_axis)
             cg.increment_index()
-            time.sleep(0.5)  # debounce
+            time.sleep(0.25)  # debounce
+
         if xbox.get_button(9):  # right joystick (for resetting the calibration map
             cg.reset()  # start the coordinate from 0, 0
             save_right.reset_everything()  # emptying the calibration matrix
 
         if xbox.get_button(7):  # start
-            cg.reset  # resetting the matrix index
             pygame.quit()
+            cg.reset()  # resetting the matrix index
             break
-
-        # changing the variables that is used to command the servo
-        if abs(x_increment) > 1:  # cutoff to avoid drifting
-            x_axis += x_increment
-        if abs(y_increment) > 1:  # cutoff to avoid drifting
-            y_axis += y_increment
 
 
         # actuate in the test rig
@@ -231,11 +252,193 @@ def joystick_proportional_control_right():
     pygame.quit()
 
 
+def joystick_proportional_control_together():
+    global x_axis
+    global y_axis
+    global neckInitCoord
+    global rPillarInitCoord
+    global lPillarInitCoord
+
+    # initialize()  # separate initialize
+    white = (255, 255, 255)  # RGB
+    red = (255, 0, 0)
+
+    gameDisplay = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("CONTROL")
+
+    pygame.display.update()
+
+    gameExit = False
+
+    while not gameExit:
+        # pygame display
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameExit = True
+        lead_y = xbox.get_axis(1)*200 + 300
+        lead_x = xbox.get_axis(0)*200 + 300
+        gameDisplay.fill(red)
+
+        pygame.draw.rect(gameDisplay, white, [lead_x, lead_y, 20, 20])
+
+        pygame.display.update()
+
+        # pygame display
+
+
+        #buttons
+        x_increment = -xbox.get_axis(0)*10
+        y_increment = xbox.get_axis(1)*10
+        increment = 20
+
+        # changing the variables that is used to command the servo
+        if abs(x_increment) > 1:  # cutoff to avoid drifting
+            x_axis += x_increment
+        if abs(y_increment) > 1:  # cutoff to avoid drifting
+            y_axis += y_increment
+        # button press
+        if xbox.get_button(3):  # y button
+            rPillarInitCoord += increment
+            lPillarInitCoord += increment
+        if xbox.get_button(0):  # a button
+            rPillarInitCoord -= increment
+            lPillarInitCoord -= increment
+        if xbox.get_button(2):  # x button
+            neckInitCoord -= increment  # move neck cw
+        if xbox.get_button(1):  # b button
+            neckInitCoord += increment  # move neck ccw
+        if xbox.get_button(6):  # showing the value of servo command
+            print(x_axis)
+            print(y_axis)
+            time.sleep(0.5)  # debounce
+        if xbox.get_button(5):  # rb
+            save_right.save_state(x_axis, y_axis)
+            cg.increment_index()
+            time.sleep(0.25)  # debounce
+
+        if xbox.get_button(9):  # right joystick (for resetting the calibration map
+            cg.reset()  # start the coordinate from 0, 0
+            save_right.reset_everything()  # emptying the calibration matrix
+
+        if xbox.get_button(7):  # start
+            pygame.quit()
+            cg.reset()  # resetting the matrix index
+            break
+
+
+        # actuate in the test rig
+        servo.setTarget(rHorEye, x_axis)
+        servo.setTarget(rVertEye, y_axis)
+        servo.setTarget(lHorEye,  + 100)
+        servo.setTarget(lVertEye, -y_axis)
+        servo.setTarget(neck, neckInitCoord)
+        servo.setTarget(rPillar, rPillarInitCoord)
+        servo.setTarget(lPillar, lPillarInitCoord)
+
+    pygame.quit()
+    servos_off()
+
+
+def joystick_proportional_control_left():
+    global x_axis
+    global y_axis
+    global neckInitCoord
+    global rPillarInitCoord
+    global lPillarInitCoord
+
+    pygame.init()
+
+    joysticks = []
+    clock = pygame.time.Clock()
+
+    for i in range(0, pygame.joystick.get_count()):
+        joysticks.append(pygame.joystick.Joystick(i))
+        joysticks[-1].init()
+        print("Detected Joystick '", joysticks[-1].get_name(), "'")
+
+    xbox = joysticks[-1]
+
+    # initialize()  # separate initialize
+    white = (255, 255, 255)  # RGB
+    red = (255, 0, 0)
+
+    gameDisplay = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("CONTROL")
+
+    pygame.display.update()
+
+    gameExit = False
+
+    while not gameExit:
+        # pygame display
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameExit = True
+        lead_y = xbox.get_axis(1) * 200 + 300
+        lead_x = xbox.get_axis(0) * 200 + 300
+        gameDisplay.fill(red)
+
+        pygame.draw.rect(gameDisplay, white, [lead_x, lead_y, 20, 20])
+
+        pygame.display.update()
+
+        # pygame display
+
+        x_increment = -xbox.get_axis(0) * 10
+        y_increment = -xbox.get_axis(1) * 10
+        increment = 20
+
+        # changing the variables that is used to command the servo
+        if abs(x_increment) > 1:  # cutoff to avoid drifting
+            x_axis += x_increment  # horizontal servo command
+        if abs(y_increment) > 1:  # cutoff to avoid drifting
+            y_axis += y_increment  # vertical servo command
+        # button presses
+        if xbox.get_button(3):  # y button
+            rPillarInitCoord += increment
+            lPillarInitCoord += increment
+        if xbox.get_button(0):  # a button
+            rPillarInitCoord -= increment
+            lPillarInitCoord -= increment
+        if xbox.get_button(2):  # x button
+            neckInitCoord -= increment  # move neck cw
+        if xbox.get_button(1):  # b button
+            neckInitCoord += increment  # move neck ccw
+        if xbox.get_button(6):  # showing the value of servo command
+            print(x_axis)
+            print(y_axis)
+            time.sleep(0.5)  # debounce
+        if xbox.get_button(5):  # rb
+            save_left.save_state(x_axis, y_axis)
+            cg.increment_index()
+            time.sleep(0.25)  # debounce
+        if xbox.get_button(9):  # right joystick (for resetting the calibration map
+            cg.reset()  # start the coordinate from 0, 0
+            save_left.reset_everything()  # emptying the calibration matrix
+        if xbox.get_button(7):  # start
+            cg.reset()  # resetting the matrix index
+            break
+
+        # actuate in the test rig
+        servo.setTarget(lHorEye, x_axis)
+        servo.setTarget(lVertEye, y_axis)
+        servo.setTarget(neck, neckInitCoord)
+        servo.setTarget(rPillar, rPillarInitCoord)
+        servo.setTarget(lPillar, lPillarInitCoord)
+
+    pygame.quit()
+    servos_off()
+
+
 # stares at the grid points
 # if you want to change the grid geometry, please edit cg and save_servo
 def grid():
-    col = coordinate_gen.col
-    row = coordinate_gen.row
+    col = cg.col
+    row = cg.row
     x = np.arange(1, col+1, 1)
     y = np.arange(1, row+1, 1)
     # debugging
@@ -265,35 +468,25 @@ def grid():
             time.sleep(sleepytime)
 
 
-def eyemove_interp_grid(x_grid, y_grid):
-    x = np.arange(1, 11, 1)
-    y = np.arange(1, 5, 1)
-    y_grid = 5 - y_grid
-    # debugging
-    # print(x)
-    # print(y)
-    X_screen = [[3840, 3795, 3740, 3685, 3625, 3555, 3490, 3430, 3370, 3315],
-                [3865, 3800, 3740, 3685, 3625, 3540, 3480, 3415, 3360, 3300],
-                [3855, 3795, 3745, 3690, 3610, 3550, 3485, 3425, 3365, 3315],
-                [3855, 3795, 3745, 3670, 3610, 3545, 3480, 3420, 3365, 3305]]
-    Y_screen = [[2800, 2800, 2800, 2805, 2805, 2805, 2800, 2800, 2805, 2800],
-                [2860, 2865, 2870, 2870, 2870, 2870, 2865, 2865, 2865, 2865],
-                [2935, 2935, 2935, 2935, 2930, 2930, 2930, 2930, 2930, 2930],
-                [2995, 3005, 3005, 3000, 3000, 3000, 3000, 3000, 3010, 3010]]
-    f_X_screen = interpolate.interp2d(x, y, X_screen, kind='cubic')
-    f_Y_screen = interpolate.interp2d(x, y, Y_screen, kind='cubic')
+# uses the joystick to control gaze location to the screen
+# DOES NOT WORK
+def joystick_screen():
+    x_axis = 1
+    y_axis = 1
 
+    pygame.init()
 
-    # print(int(f_X_screen(x_grid, y_grid)))
-    # print(int(f_Y_screen(x_grid, y_grid)))
-    eye_hor(int(f_X_screen(x_grid, y_grid)))
-    eye_vert(int(f_Y_screen(x_grid, y_grid)))
-    sleepytime = 0.3
-    # time.sleep(sleepytime)
+    joysticks = []
+    clock = pygame.time.Clock()
 
+    for i in range(0, pygame.joystick.get_count()):
+        joysticks.append(pygame.joystick.Joystick(i))
+        joysticks[-1].init()
+        print("Detected Joystick '", joysticks[-1].get_name(), "'")
 
-def joystick_proportional_control_left():
-    initialize()
+    xbox = joysticks[-1]
+
+    # initialize()  # separate initialize
     white = (255, 255, 255)  # RGB
     red = (255, 0, 0)
 
@@ -321,15 +514,132 @@ def joystick_proportional_control_left():
 
         # pygame display
 
-        x_increment = xbox.get_axis(0) * 30
-        y_increment = xbox.get_axis(1) * 30
+        x_increment = xbox.get_axis(0)
+        y_increment = xbox.get_axis(1)
+
+        # changing the variables that is used to command the servo
+        if abs(x_increment) > 0.2:  # cutoff to avoid drifting
+            x_axis += x_increment  # horizontal servo command
+        if abs(y_increment) > 0.2:  # cutoff to avoid drifting
+            y_axis += y_increment  # vertical servo command
+        # button presses
+        if xbox.get_button(6):  # showing the value of servo command
+            print(x_axis)
+            print(y_axis)
+            time.sleep(0.25)  # debounce
+
+        # actuate in the test rig
+        eyemove_interp_grid(x_axis, y_axis)
+
+    pygame.quit()
+    servos_off()
+
+
+def eyemove_interp_grid(x_grid, y_grid):
+    # setting up the coordinate points
+    x = np.arange(1, cg.col+1, 1)
+    y = np.arange(1, cg.row+1, 1)
+    y_grid = cg.row+1 - y_grid
+    # debugging
+    # print(x)
+    # print(y)
+
+    # repopulating the calibration matrix
+
+    # left eye calibration map
+    X_screen_left = save_left.array_final_x
+    Y_screen_left = save_left.array_final_y
+
+    # right eye calibration map
+    X_screen_right = save_right.array_final_x
+    Y_screen_right = save_right.array_final_y
+
+    # interpolation model
+    f_X_screen_left = interpolate.interp2d(x, y, X_screen_left, kind='linear')
+    f_Y_screen_left = interpolate.interp2d(x, y, Y_screen_left, kind='linear')
+    f_X_screen_right = interpolate.interp2d(x, y, X_screen_right, kind='linear')
+    f_Y_screen_right = interpolate.interp2d(x, y, Y_screen_right, kind='linear')
+
+    # print(int(f_X_screen(x_grid, y_grid)))
+    # print(int(f_Y_screen(x_grid, y_grid)))
+    servo.setTarget(lHorEye, int(f_X_screen_left(x_grid, y_grid)))
+    servo.setTarget(lVertEye, int(f_Y_screen_left(x_grid, y_grid)))
+    servo.setTarget(rHorEye, int(f_X_screen_right(x_grid, y_grid)))
+    servo.setTarget(rVertEye, int(f_Y_screen_right(x_grid, y_grid)))
+
+    sleepytime = 0.3
+    # time.sleep(sleepytime)
+
+
+def joystick_eyes_together():
+    global x_axis
+    global y_axis
+    global neckInitCoord
+    global rPillarInitCoord
+    global lPillarInitCoord
+
+    pygame.init()
+
+    joysticks = []
+    clock = pygame.time.Clock()
+
+    for i in range(0, pygame.joystick.get_count()):
+        joysticks.append(pygame.joystick.Joystick(i))
+        joysticks[-1].init()
+        print("Detected Joystick '", joysticks[-1].get_name(), "'")
+
+    xbox = joysticks[-1]
+
+    # initialize()  # separate initialize
+    white = (255, 255, 255)  # RGB
+    red = (255, 0, 0)
+
+    gameDisplay = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("CONTROL")
+
+    pygame.display.update()
+
+    gameExit = False
+
+    # initial values of servo middle point
+    x_axis_right = 3715
+    y_axis_right = 2560
+    x_axis_left = 3715
+    y_axis_left = 2560
+
+    while not gameExit:
+        # pygame display
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameExit = True
+        lead_y = xbox.get_axis(1) * 200 + 300
+        lead_x = xbox.get_axis(0) * 200 + 300
+        gameDisplay.fill(red)
+
+        pygame.draw.rect(gameDisplay, white, [lead_x, lead_y, 20, 20])
+
+        pygame.display.update()
+
+        # pygame display
+
+        x_increment_right = -xbox.get_axis(0) * 10
+        y_increment_right = xbox.get_axis(1) * 10
+        x_increment_left = -xbox.get_axis(4) * 10
+        y_increment_left = -xbox.get_axis(3) * 10
         increment = 20
 
         # changing the variables that is used to command the servo
-        if abs(x_increment) > 1:  # cutoff to avoid drifting
-            x_axis += x_increment  # horizontal servo command
-        if abs(y_increment) > 1:  # cutoff to avoid drifting
-            y_axis += y_increment  # vertical servo command
+        if abs(x_increment_right) > 1:  # cutoff to avoid drifting
+            x_axis_right += x_increment_right  # horizontal servo command
+        if abs(y_increment_right) > 1:  # cutoff to avoid drifting
+            y_axis_right += y_increment_right  # vertical servo command
+        # changing the variables that is used to command the servo
+        if abs(x_increment_left) > 1:  # cutoff to avoid drifting
+            x_axis_left += x_increment_left  # horizontal servo command
+        if abs(y_increment_right) > 1:  # cutoff to avoid drifting
+            y_axis_left += y_increment_left  # vertical servo command
         # button presses
         if xbox.get_button(3):  # y button
             rPillarInitCoord += increment
@@ -341,39 +651,82 @@ def joystick_proportional_control_left():
             neckInitCoord -= increment  # move neck cw
         if xbox.get_button(1):  # b button
             neckInitCoord += increment  # move neck ccw
-        if xbox.get_button(4):  # lb
-            rPillarInitCoord -= increment
-            lPillarInitCoord += increment
-        if xbox.get_button(5):  # rb
-            rPillarInitCoord += increment
-            lPillarInitCoord -= increment
-        if xbox.get_button(6):  # showing the value of servo command
-            print(x_axis)
-            print(y_axis)
-            time.sleep(0.5)  # debounce
-        if xbox.get_button(11):  # rt
-            save_left.save_state(x_axis, y_axis)
-            cg.increment_index()
-            time.sleep(0.5)  # debounce
-        if xbox.get_button(9):  # right joystick (for resetting the calibration map
-            cg.reset()  # start the coordinate from 0, 0
-            save_left.reset_everything()  # emptying the calibration matrix
-        if xbox.get_button(7):  # start
-            cg.reset  # resetting the matrix index
-            pygame.quit()
-            break
 
         # actuate in the test rig
-        servo.setTarget(lHorEye, x_axis)
-        servo.setTarget(lVertEye, y_axis)
+        if (abs(x_increment_left) > 2) | (abs(y_increment_left) > 2):
+            servo.setTarget(lHorEye, x_axis_left)
+            servo.setTarget(lVertEye, y_axis_left)
+            servo.setTarget(rHorEye, x_axis_right)
+            servo.setTarget(rVertEye, y_axis_right)
+        elif (abs(x_increment_right) > 2) | (abs(y_increment_right) > 2):
+            servo.setTarget(lHorEye, x_axis_left)
+            servo.setTarget(lVertEye, y_axis_left)
         servo.setTarget(neck, neckInitCoord)
         servo.setTarget(rPillar, rPillarInitCoord)
         servo.setTarget(lPillar, lPillarInitCoord)
 
     pygame.quit()
+    servos_off()
 
+
+class Shapes(object):
+    # draws a rectangle with x and y as starting points and l1 and l2 as the sides
+    @staticmethod
+    def rectangle(x, y, l1, l2):
+        sleepytime = 1
+        eyemove_interp_grid(x, y)
+        time.sleep(sleepytime)
+
+        eyemove_interp_grid(x + l1, y)
+        time.sleep(sleepytime)
+
+        eyemove_interp_grid(x + l1, y + l2)
+        time.sleep(sleepytime)
+
+        eyemove_interp_grid(x, y + l2)
+        time.sleep(sleepytime)
+
+        eyemove_interp_grid(x, y)
+        time.sleep(sleepytime)
+
+    @staticmethod
+    # draw a square with sides = side
+    def square(x, y, side):
+        Shapes.rectangle(x, y, side, side)
+
+    @staticmethod
+    # draw a triangle
+    def circle(x, y, radius, rotations):
+        theta = np.arange(0, rotations*2*np.pi, 0.1)
+        # print(theta)
+        for i in theta:
+            eyemove_interp_grid(x + radius*np.cos(i), y + radius*np.sin(i))
+            time.sleep(0.001)
+
+
+# pre: input valid channel number (check the hardware connection)
+# post: sets the maximum acceleration for all the channels
+# parameter:
+#   maxAccel = maximum acceleration allowed (0 is inf)
+#   maxSpeed = maximum speed allowed (0 is inf)
+def set_param(maxAccel, maxSpeed):
+    # Specific for 12 channel Pololu board
+    for ch in range(12):
+        servo.setAccel(ch, maxAccel)
+        servo.setSpeed(ch, maxSpeed)
 
 if __name__ == '__main__':
+    initialize()
+    # main()
+
+    # working demo
     joystick_proportional_control_right()
     joystick_proportional_control_left()
+    set_param(10, 0)  # limitting speed
     grid()
+    set_param(0, 0)  # limitting speed
+    Shapes.circle(3, 3, 1, 10)
+    set_param(10, 10)  # limitting speed
+    Shapes.square(3, 1, 1)
+    # joystick_eyes_together()
+

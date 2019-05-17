@@ -1,4 +1,3 @@
-import user_interface   #get current
 import coordinate_gen
 import numpy as np
 import csv
@@ -25,10 +24,11 @@ def save_state(servo_x,servo_y):    # every time this is called it adds to the l
     global array_position         # need these to be persistent
     global array
 
-    array.append([servo_x, servo_y, coordinate_gen.get_X(), coordinate_gen.get_Y()])
-    array_position = array_position + 1
-    print("now doing:")
-    print(array_position)
+    if array_position < last + 1:
+        array.append([servo_x, servo_y, coordinate_gen.get_X(), coordinate_gen.get_Y()])
+        array_position = array_position + 1
+        print("now doing:")
+        print(array_position)
 
     if array_position == last+1:
         save_to_final()
@@ -42,16 +42,19 @@ def save_to_final():
     print(array)
 
     for z in range(last):
-        array_final_x[array[z][3-1]-1][array[z][4-1]-1] = array[z][1-1]                 #saves to array using generated X and Y as list indices
-        array_final_y[array[z][3 - 1] - 1][array[z][4 - 1] - 1] = array[z][2 - 1]
+        array_final_x[array[z][4-1]-1][array[z][3-1]-1] = array[z][1-1]                 #saves to array using generated X and Y as list indices
+        array_final_y[array[z][4-1] - 1][array[z][3-1] - 1] = array[z][2 - 1]
+
+    print(array_final_x)
+    print(array_final_y)
 
 def export_to_csv():
 
-    with open('left_x.csv', 'w', newline='') as output:
+    with open('right_x.csv', 'w', newline='') as output:
         writer = csv.writer(output, lineterminator='\n')
         writer.writerows(array_final_x)
 
-    with open('left_y.csv', 'w', newline='') as output:
+    with open('right_y.csv', 'w', newline='') as output:
         writer = csv.writer(output, lineterminator='\n')
         writer.writerows(array_final_y)
 
