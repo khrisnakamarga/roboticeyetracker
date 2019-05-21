@@ -2,7 +2,7 @@
 # from fbchat.models import *
 # import RoboticEyesMovement
 # import os
-# client = Client('khrisnaadi@ymail.com', 'Samiaji10bandung')
+# client = Client('khrisnaadi@ymail.com', '<insert your password')
 #
 # if __name__ == "__main__":
 #     no_of_friends = 1
