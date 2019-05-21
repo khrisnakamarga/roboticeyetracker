@@ -28,7 +28,7 @@ from fbchat.models import *
 import RoboticEyesMovement
 import os
 import serial
-client = Client('khrisnaadi@gmail.com', 'Samiaji10bandung')
+client = Client('khrisnaadi@gmail.com', '<insert your password>')
 
 if __name__ == "__main__":
     RoboticEyesMovement.initialize()
