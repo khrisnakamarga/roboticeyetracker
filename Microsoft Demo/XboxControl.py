@@ -166,6 +166,7 @@ def main():
     servos_off()
 
 
+# Calibration algorithm for the right anatomical eye
 def joystick_proportional_control_right():
     global x_axis
     global y_axis
@@ -341,6 +342,7 @@ def joystick_proportional_control_together():
     servos_off()
 
 
+# Calibration algorithm for the left anatomical eye
 def joystick_proportional_control_left():
     global x_axis
     global y_axis
