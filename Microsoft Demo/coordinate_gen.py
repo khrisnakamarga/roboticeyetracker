@@ -1,8 +1,8 @@
 currentX = 1
 currentY = 1
 
-row = 4   #need to get this set from the UI
-col = 6
+row = 3   #need to get this set from the UI
+col = 3
 
 def get_X():
     return currentX

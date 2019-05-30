@@ -5,23 +5,59 @@
 import csv  # library to read the .csv file
 
 
+# keeps track of the x and y calibration map from the calibration array
 class CalibrationMap:
+
     # initializes the class with empty x and y map with size row x col
     def __init__(self, col, row):
         self.x_map = [[[] for i in range(col)] for j in range(row)]
         self.y_map = [[[] for i in range(col)] for j in range(row)]
-        self.col = col
-        self.row = row
+        self.col = col  # column of the calibration grid
+        self.row = row  # row of the calibration grid
+        self.x_index = 0
+        self.y_index = 0
+        self.csv_name = "needs work"
 
     # loads the files x_name and y_name to their respective maps
     def load(self, x_name, y_name):
         self.x_map = load(self.row, self.col, x_name)
         self.y_map = load(self.row, self.col, y_name)
 
+    # loads the arrays generated to the CalibrationMap class
+    def load_array(self, x_map, y_map):
+        self.x_map = x_map
+        self.y_map = y_map
+
     # prints the X and Y calibration map to verify with the actual .csv file
     def check(self):
         print("X calibration map: ", self.x_map)
         print("Y calibration map: ", self.y_map)
+
+    # saving the coordinate map
+    def save(self, x, y):
+        self.x_map[self.y_index][self.x_index] = x
+        self.y_map[self.y_index][self.x_index] = y
+        self.increment()
+
+    # incrementing x_index and y_index properly
+    def increment(self):
+        self.x_index += 1
+        if self.x_index >= self.col:
+            self.x_index = 0
+            self.y_index += 1
+            print("going to the next row")
+        if self.y_index >= self.row:
+            self.restart_index()
+            print("Calibration is Done!")
+            csv_write(self.x_map, self.y_map, self.csv_name)
+        else:
+            print("x: ", self.x_index, "y: ", self.y_index)
+            print("next spot please")
+
+    # restarting the indices
+    def restart_index(self):
+        self.x_index = 0
+        self.y_index = 0
 
 
 # loading the information from the <filename>.csv to the class
@@ -33,13 +69,36 @@ def load(col, row, filename):
         for row in readCSV:
             yindex = 0
             for col in row:
-                calibration_map[xindex][yindex] = col
+                calibration_map[xindex][yindex] = float(col)
                 yindex += 1
             xindex += 1
     return calibration_map
 
 
+# saving the x_map and y_map to a .csv file
+def csv_write(x_map, y_map, csv_name):
+    with open(csv_name + "_x.csv", 'w', newline='') as output:
+        writer = csv.writer(output, lineterminator='\n')
+        writer.writerows(x_map)
+
+    with open(csv_name + "_y.csv", 'w', newline='') as output:
+        writer = csv.writer(output, lineterminator='\n')
+        writer.writerows(y_map)
+
+
+# testing the module
 if __name__ == '__main__':
-    left_eye = CalibrationMap(4, 6)
-    left_eye.load('left_x.csv', 'right_x.csv')
+    left_eye = CalibrationMap(2, 2, 'left')
+    right_eye = CalibrationMap(2, 2, 'right')
+    left_eye.save(1, 5)
+    left_eye.save(2, 6)
+    left_eye.save(3, 7)
+    left_eye.save(4, 8)
+
+    right_eye.save(11, 15)
+    right_eye.save(12, 16)
+    right_eye.save(13, 17)
+    right_eye.save(14, 18)
+
     left_eye.check()
+    right_eye.check()

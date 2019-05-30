@@ -5,6 +5,7 @@ import save_servo_state_right as save_right  # saving right eye calibration map
 import coordinate_gen as cg  # generating the grid for the calibration map
 import numpy as np
 from scipy import interpolate
+import load_calib  # to pre-load the calibration map
 
 # GLOBAL VARIABLES
 # Pololu Channels
@@ -49,10 +50,13 @@ def servos_off():
     for ch in range(12):
         servo.setTarget(ch, 0)
 
+
+# linear relationship
 def joystick_for_eye(joystick_x_coordinate):
     return joystick_x_coordinate*(4000 - 3400) + 3715
 
 
+# linear relationship
 def joystick_for_eye_r(joystick_y_coordinate):
     return -joystick_y_coordinate*(3010 - 2350) + 2560
 
@@ -717,18 +721,44 @@ def set_param(maxAccel, maxSpeed):
         servo.setAccel(ch, maxAccel)
         servo.setSpeed(ch, maxSpeed)
 
+
 if __name__ == '__main__':
     initialize()
     # main()
 
     # working demo
-    joystick_proportional_control_right()
-    joystick_proportional_control_left()
-    set_param(10, 0)  # limitting speed
+    load_prev = input("Would you like to pre-load the calibration map? (y/n)")
+    if load_prev == "n":
+        joystick_proportional_control_right()
+        joystick_proportional_control_left()
+    else:
+        left_eye_calibration = load_calib.CalibrationMap(3, 3)
+        left_eye_calibration.load('left_x.csv', 'left_y.csv')
+        right_eye_calibration = load_calib.CalibrationMap(3, 3)
+        right_eye_calibration.load('right_x.csv', 'right_y.csv')
+
+        # left eye calibration map
+        save_left.array_final_x = left_eye_calibration.x_map
+        save_left.array_final_y = left_eye_calibration.y_map
+
+        # right eye calibration map
+        save_right.array_final_x = right_eye_calibration.x_map
+        save_right.array_final_y = right_eye_calibration.y_map
+
+    # set_param(10, 0)  # limitting speed
     grid()
-    set_param(0, 0)  # limitting speed
-    Shapes.circle(3, 3, 1, 10)
-    set_param(10, 10)  # limitting speed
-    Shapes.square(3, 1, 1)
-    # joystick_eyes_together()
+    # set_param(0, 0)  # limitting speed
+    # Shapes.circle(3, 3, 1, 10)
+    # set_param(10, 10)  # limitting speed
+    # Shapes.square(3, 1, 1)
+    print(save_left.array_final_x)
+    eyemove_interp_grid(2, 2)
+    time.sleep(5)
+    eyemove_interp_grid(1, 1)
+    time.sleep(5)
+    eyemove_interp_grid(2, 3)
+    time.sleep(5)
+    eyemove_interp_grid(3, 1)
+
+
 

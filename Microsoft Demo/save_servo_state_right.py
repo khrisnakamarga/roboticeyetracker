@@ -9,8 +9,8 @@ This module:
     tbd
 '''
 
-row = 4     # to do: need to get this set from the UI
-col = 6
+row = 3     # to do: need to get this set from the UI
+col = 3
 last = row*col
 
 array_position = 1    #not 0
