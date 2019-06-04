@@ -9,14 +9,14 @@ import csv  # library to read the .csv file
 class CalibrationMap:
 
     # initializes the class with empty x and y map with size row x col
-    def __init__(self, col, row):
+    def __init__(self, col, row, csv_name="Unknown"):
         self.x_map = [[[] for i in range(col)] for j in range(row)]
         self.y_map = [[[] for i in range(col)] for j in range(row)]
         self.col = col  # column of the calibration grid
         self.row = row  # row of the calibration grid
         self.x_index = 0
         self.y_index = 0
-        self.csv_name = "needs work"
+        self.csv_name = csv_name
 
     # loads the files x_name and y_name to their respective maps
     def load(self, x_name, y_name):
@@ -88,8 +88,8 @@ def csv_write(x_map, y_map, csv_name):
 
 # testing the module
 if __name__ == '__main__':
-    left_eye = CalibrationMap(2, 2, 'left')
-    right_eye = CalibrationMap(2, 2, 'right')
+    left_eye = CalibrationMap(2, 2)
+    right_eye = CalibrationMap(2, 2)
     left_eye.save(1, 5)
     left_eye.save(2, 6)
     left_eye.save(3, 7)

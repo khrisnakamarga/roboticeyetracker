@@ -752,13 +752,13 @@ if __name__ == '__main__':
     # set_param(10, 10)  # limitting speed
     # Shapes.square(3, 1, 1)
     print(save_left.array_final_x)
-    eyemove_interp_grid(2, 2)
-    time.sleep(5)
-    eyemove_interp_grid(1, 1)
-    time.sleep(5)
-    eyemove_interp_grid(2, 3)
-    time.sleep(5)
-    eyemove_interp_grid(3, 1)
+    eyemove_interp_grid(1.8, 2.1)  # middle
+    time.sleep(2)
+    eyemove_interp_grid(2, 3)  # top
+    time.sleep(2)
+    eyemove_interp_grid(1, 1)  # left
+    time.sleep(2)
+    eyemove_interp_grid(3, 1)  # right
 
 
 
