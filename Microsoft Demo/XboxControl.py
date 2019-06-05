@@ -39,8 +39,8 @@ eyeVertInitCoord = 3000  # eyes in the middle vertically
 def initialize():
     global servo
     servo = maestro.Controller('COM7')  #COM7 on Khrisna's
-    servo.setTarget(rPillar, rPillarInitCoord)
-    servo.setTarget(lPillar, lPillarInitCoord)
+    servo.setTarget(rPillar, rPillarInitCoord - 280)
+    servo.setTarget(lPillar, lPillarInitCoord - 280)
     servo.setTarget(lHorEye, 3715)
     servo.setTarget(lVertEye, 2560)
     time.sleep(1)
@@ -745,20 +745,56 @@ if __name__ == '__main__':
         save_right.array_final_x = right_eye_calibration.x_map
         save_right.array_final_y = right_eye_calibration.y_map
 
-    # set_param(10, 0)  # limitting speed
-    grid()
+    set_param(10, 0)  # limitting speed
+    # grid()
     # set_param(0, 0)  # limitting speed
     # Shapes.circle(3, 3, 1, 10)
     # set_param(10, 10)  # limitting speed
     # Shapes.square(3, 1, 1)
     print(save_left.array_final_x)
+
+    # #telling calib that everything is fine
+    # servo.setTarget(rPillar, rPillarInitCoord - 100)
+    # servo.setTarget(lPillar, lPillarInitCoord - 100)
+    # time.sleep(5)
+    # servo.setTarget(rPillar, rPillarInitCoord - 280)
+    # servo.setTarget(lPillar, lPillarInitCoord - 280)
+    # time.sleep(1)
+
+    # Calibration
     eyemove_interp_grid(1.8, 2.1)  # middle
-    time.sleep(2)
+    print("next")
+    time.sleep(5)
     eyemove_interp_grid(2, 3)  # top
-    time.sleep(2)
+    print("next")
+    time.sleep(5)
     eyemove_interp_grid(1, 1)  # left
-    time.sleep(2)
+    print("next")
+    time.sleep(5)
     eyemove_interp_grid(3, 1)  # right
+    print("next")
+    time.sleep(5)
+    eyemove_interp_grid(1.8, 2.1)  # right
+    print("finish")
+    time.sleep(5)
+
+    # # drawing shapes
+    # set_param(0, 0)
+    # Shapes.square(1, 1, 0.5)
+    # time.sleep(5)
+    # Shapes.square(2, 1, 0.5)
+    # time.sleep(5)
+    # Shapes.square(2, 2, 0.5)
+    # time.sleep(5)
+    # Shapes.square(1, 2, 0.5)
+    # time.sleep(5)
+    # Shapes.square(1.5, 1.5, 1)
+    # time.sleep(5)
+    # Shapes.square(1.5, 1.5, 1.5)
+    # time.sleep(5)
+    # eyemove_interp_grid(1.8, 2.1)  # right
+    # print("finish")
+    # time.sleep(5)
 
 
 
