@@ -9,7 +9,7 @@ import load_calib  # to pre-load the calibration map
 
 # GLOBAL VARIABLES
 # Pololu Channels
-# NOT ANATOMICAL LEFT RIGHT
+# ANATOMICAL LEFT RIGHT
 rPillar = 1  # Right Neck Pillar
 lPillar = 2  # Left Neck Pillar
 rHorEye = 0  # Left Eye Horizontal Motion
